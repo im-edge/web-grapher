@@ -4,19 +4,20 @@ namespace IMEdge\Web\Grapher\GraphRendering;
 
 use gipfl\IcingaWeb2\Url;
 use Icinga\Module\Inventory\Data\Security\Keys;
-use Icinga\Module\Inventory\Measurement\Graph\ImedgeRrdGraph;
 use Icinga\Module\Inventory\Measurement\Structure\ExtendedRrdInfo;
 use Icinga\Module\Inventory\Rpc\IMEdgeClient;
 use Icinga\Module\Inventory\Web\Url\UrlSigner;
 use Icinga\Web\UrlParams;
 use IMEdge\Json\JsonString;
 use IMEdge\RrdGraphInfo\GraphInfo;
+use IMEdge\Web\Grapher\Graph\ImedgeRrdGraph;
 use ipl\Html\Html;
 use ipl\Html\HtmlDocument;
 
 class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canvas?
 {
-    protected const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==';
+    protected const TRANSPARENT_GIF = 'data:image/gif;base64,'
+        . 'R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==';
 
     public ImedgeRrdGraph $graph;
     /** @var ExtendedRrdInfo[] */
