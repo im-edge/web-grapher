@@ -55,6 +55,9 @@ class TimeRange
      */
     public function setEnd($end): void
     {
+        if ($end === '') {
+            $end = null;
+        }
         if ($end === null) {
             $this->end = null;
             $this->epochEnd = null;
@@ -69,6 +72,9 @@ class TimeRange
      */
     public function setStart($start): void
     {
+        if ($start === '') {
+            $start = null;
+        }
         if ($start === null) {
             $this->start = null;
             $this->epochStart = null;
