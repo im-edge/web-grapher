@@ -24,6 +24,7 @@
     },
     "require": {
         "php": ">=7.4",
+        "ext-ctype": "*",
         "ext-gd": "*",
         "ext-zlib": "*",
         "imedge/json": "^0.1.0",
