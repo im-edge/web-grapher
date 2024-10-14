@@ -1,0 +1,34 @@
+{
+    "name": "imedge/web-grapher",
+    "description": "IMEdge Web Grapher library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Gelf",
+            "email": "thomas@gelf.net"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "IMEdge\\Web\\Grapher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IMEdge\\Tests\\Web\\Grapher\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.3 || ^9.5",
+        "squizlabs/php_codesniffer": "^3.7",
+        "symplify/easy-coding-standard": "^12.0.8"
+    }
+}
