@@ -18,8 +18,8 @@ class TimeRange
     protected $start;
     /** @var int|string|null */
     protected $end;
-    protected int $epochStart;
-    protected int $epochEnd;
+    protected ?int $epochStart;
+    protected ?int $epochEnd;
     protected ?int $step;
 
     /**
@@ -57,6 +57,7 @@ class TimeRange
     {
         if ($end === null) {
             $this->end = null;
+            $this->epochEnd = null;
         } else {
             $this->epochEnd = self::wantEpoch($end);
             $this->end = $end;
@@ -70,22 +71,30 @@ class TimeRange
     {
         if ($start === null) {
             $this->start = null;
+            $this->epochStart = null;
         } else {
             $this->start = $start;
+            $this->epochStart = $this->calculateStartEpoch($start);
         }
     }
 
-    protected function recalculateStartEpoch(): void
+    /**
+     * @param int|string $start
+     */
+    protected function calculateStartEpoch($start): int
     {
-        $start = $this->getStart();
-        $this->epochStart = self::wantEpoch(
+        return self::wantEpoch(
             is_string($start)
-            ? str_replace('end', $this->getEnd(), $start)
-            : $start
+                ? str_replace('end', (string) $this->getEnd(), $start)
+                : $start
         );
     }
 
-    public function set($start, $end)
+    /**
+     * @param string|int|null $start
+     * @param string|int|null $end
+     */
+    public function set($start, $end): void
     {
         $this->setEnd($end);
         $this->setStart($start);
@@ -108,12 +117,12 @@ class TimeRange
 
     public function getEpochStart(): int
     {
-        return $this->epochStart;
+        return $this->epochStart ?? self::wantEpoch($this->calculateStartEpoch(self::DEFAULT_END));
     }
 
     public function getEpochEnd(): int
     {
-        return $this->epochEnd;
+        return $this->epochEnd ?? self::wantEpoch(self::DEFAULT_END);
     }
 
     public static function fromUrlParams(UrlParams $params): TimeRange
