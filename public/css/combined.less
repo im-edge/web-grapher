@@ -1,0 +1,373 @@
+.imedge-graph {
+    display: grid;
+    position: relative;
+    width: 100%;
+    //  background: red;
+    height: auto;
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+
+    grid-template-columns: minmax(0, 3fr) minmax(min-content, 1fr);
+    grid-template-areas: "header header" "canvas legend";
+    grid-template-rows: fit-content(0) auto;
+}
+
+.imedge-graph-legend {
+    grid-area: legend;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-width: 0;
+}
+
+#layout.twocolsNONO .imedge-graph, .imedge-graph.legend-below {
+    grid-template-columns: 1fr;
+    grid-template-areas: "header" "canvas" "legend";
+    // grid-template-rows: fit-content(0) auto 6em;// fit-content(0);
+    grid-template-rows: fit-content(0) auto fit-content(0);
+    .imedge-graph-legend {
+        flex-direction: row;
+    }
+}
+#layout.twocolsNONO .imedge-graph {
+    .imedge-graph-legend {
+        font-size: 0.9em; // sure?
+    }
+}
+#layout.minimal-layout .imedge-graph {
+    grid-template-columns: 1fr;
+    grid-template-areas: "header" "canvas";
+    grid-template-rows: fit-content(0) auto;
+    .imedge-graph-legend {
+        display: none;
+    }
+}
+
+.imedge-graph.legend-on-side {
+    grid-template-columns: 3fr minmax(min-content, 1fr);
+    grid-template-areas: "header header" "canvas legend";
+    grid-template-rows: fit-content(0) auto;
+}
+// Hint avoid twocols override
+#layout.twocols .imedge-graph {
+    &.preview-graph {
+        grid-template-columns: 1fr;
+        grid-template-areas: "canvas";
+        grid-template-rows: 1fr;
+    }
+}
+.imedge-graph.preview-graph {
+    grid-template-columns: 1fr;
+    grid-template-areas: "canvas";
+    grid-template-rows: 1fr;
+}
+.imedge-graph-header {
+    grid-area: header;
+    h2 {
+        display: inline-block;
+    }
+    > ul.nav {
+        display: inline-block;
+        &:first-of-type {
+            margin-left: 2em;
+        }
+    }
+    ul {
+        z-index: 100;
+    }
+}
+.imedge-graph-canvas {
+    position: relative;
+    grid-area: canvas;
+    overflow: hidden;
+    min-width: 0; // prevent overflow
+    // contains img, debug, cursor
+    img {
+        max-height: 100%;
+    }
+}
+
+.imedge-graph.fullscreen {
+    .imedge-graph-header {
+        padding-left: 1em;
+    }
+}
+
+
+.imedge-graph table.gipfl-name-value-table {
+    width: auto;
+    th {
+        width: auto;
+        min-width: unset;
+        text-align: left;
+        padding: 0 1em 0 0;
+    }
+    td {
+        padding: 0;
+    }
+}
+
+/** Dropdown in action bar **/
+.imedge-graph-header ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        a { display: block; }
+    }
+}
+
+.imedge-graph-header > ul {
+    display: inline-block;
+    > li {
+        display: inline-block;
+    }
+}
+
+.imedge-graph-header > ul ul {
+    padding: 0.5em 1em 0 0;
+    min-width: 10em;
+    position: absolute;
+    display: none;
+    background-color: @menu-flyout-bg-color;
+    border: 1px solid @gray-light;
+    box-shadow: 0.3em 0.3em 0.3em 0 rgba(0, 0, 0, 0.2);
+
+    a {
+        display: block;
+        padding: 0.3em 0.5em 0.3em 1em;
+        margin: 0;
+        outline: none;
+        color: @menu-flyout-color;
+
+        &:hover {
+            text-decoration: underline;
+            &:before {
+                text-decoration: none;
+            }
+        }
+    }
+
+    li.active a {
+        font-weight: bold;
+    }
+}
+
+.imedge-graph-header > ul > li:hover ul {
+    display: block;
+    z-index: 2;
+}
+.imedge-graph-header > ul > li > a {
+    padding: 0.2em 0.5em;
+}
+.imedge-graph-header > ul > li:hover {
+    background-color: @tr-active-color;
+    border-top-left-radius: 0.1em;
+    border-top-right-radius: 0.1em;
+    & > a {
+        color: @icinga-blue;
+        text-decoration: none;
+    }
+}
+/** END of dropdown in action bar **/
+
+
+
+
+
+
+div.legend-color { // TODO: imedge prefix
+    display: inline-block;
+    width: 1.2em;
+    vertical-align: middle;
+    height: 1.2em;
+    border: 1px solid @text-color;
+}
+
+
+
+div.XXimg-rows {
+    // border: 1px solid green;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+
+// Older, w/o flex:
+// width: 32em; display: inline-block; vertical-align: top; overflow: hidden; float: left; margin-right: 1em;
+// had another div as content: max-width: 72em; display: block; vertical-align: top; overflow: hidden; float: left;
+}
+
+div.XXimg-col {
+    // border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+
+div.rrd-control {
+    display: inline-block;
+    position: relative;
+}
+
+.rrd-toggle-ds.disabled {
+    text-decoration: line-through;
+}
+
+.imedge-graph-canvas {
+    position: relative; // dup?
+    overscroll-behavior: contain;
+    &.selecting {
+        cursor: e-resize;
+    }
+}
+
+.rrd-graph {
+    position: relative;
+    // overflow: hidden; disabled bc of hover -> details
+    overscroll-behavior: contain;
+    // z-index: 2000;
+    line-height: 0.2em; // solves issues with spacing. Hint: affects potential future contained elements
+    line-height: normal;
+    &.selecting {
+        cursor: e-resize;
+    }
+    img {
+        min-width: 1px;
+    }
+    // Highlight graphs:
+    // background: fade(@gray-light, 10%);
+}
+
+.rrd-graph {
+    div.description .name-value-table {
+        display: inline-block;
+        width: 49%;
+        font-size: 0.85em;
+        vertical-align: top;
+        th {
+            min-width: 9em;
+            width: 40%;
+        }
+    }
+    div.description.hidden {
+        display: none;
+        background: @text-color-inverted;
+        color: @text-color;
+        position: absolute;
+        left: -50%;
+        padding: 0.5em 1em;
+        border-radius: 1em;
+        margin-top: 2em;
+        margin-left: -1.8em;
+        z-index: 20;
+        box-shadow: 0.3em 0.3em 0.5em @gray;
+        &.hovered {
+            display: block;
+        }
+    }
+}
+
+div.rrd-selection {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+div.rrd-debug {
+    position: absolute;
+    display: none;
+    color: @text-color;
+    // border-top: 1px solid @text-color; // TODO: fade both, but... seems to fail with Icinga dark/light logic
+    background: @text-color-inverted;
+    background: fade(@white, 50%);
+    padding: 0 1em;
+
+    line-height: 1.5;
+    height: 1.5em;
+    overflow: hidden;
+    font-size: 1em;
+}
+
+div.rrd-mark {
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 1px;
+    left: 0;
+    top: 0;
+    border-right: 1px solid fade(@icinga-blue, 25%);
+    &:before {
+        content: ' ';
+        display: block;
+        position: relative;
+        top: 0;
+        left: -0.25em;
+        width: 0.55em;
+        height: 0.55em;
+        background-color: @icinga-blue;
+        border-radius: 0.5em;
+    }
+}
+
+div.rrd-cursor {
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 1px;
+    left: 0;
+    top: 0;
+    border-right: 1px solid fade(@icinga-blue, 70%);
+    /*&:after {
+      top: 100%;
+      left: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-top-color: @icinga-blue;
+      border-width: 5px;
+      margin-left: -4.5px;
+      transform: rotate(180deg) translateY(-8px);
+    }
+    &:before {
+      top: 0;
+      left: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-top-color: fade(@icinga-blue, 70%);
+      border-width: 5px;
+      margin-left: -4.5px;
+    }*/
+}
+div.rrd-time-selection {
+    border: 1px dashed @icinga-blue;
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    &.invalid {
+        background-color: fade(@color-critical, 25%);
+        border-color: @color-critical;
+    }
+}
+div.rrd-time-not-selection {
+    position: absolute;
+    z-index: 2;
+    background: fade(@icinga-blue, 40%); // rgba(0, 149, 191, 0.25);
+    height: 100%;
+    &:hover {
+        cursor: w-resize;
+    }
+    &.selection-before {
+        cursor: e-resize;
+    }
+}
