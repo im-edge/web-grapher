@@ -35,6 +35,7 @@
         "gipfl/icingaweb2": ">=0.10",
         "gipfl/translation": ">=0.1",
         "gipfl/zfdb": "^0.4.0",
+        "imedge/web-rpc": "@dev",
         "ipl/html": ">=0.8",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.3 || ^9.5",

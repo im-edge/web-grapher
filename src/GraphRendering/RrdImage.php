@@ -3,14 +3,14 @@
 namespace IMEdge\Web\Grapher\GraphRendering;
 
 use gipfl\IcingaWeb2\Url;
-use Icinga\Module\Inventory\Data\Security\Keys;
-use Icinga\Module\Inventory\Measurement\Structure\ExtendedRrdInfo;
-use Icinga\Module\Inventory\Rpc\IMEdgeClient;
+use Icinga\Module\Inventory\Data\Security\Keys; // TODO: move to other namespace
 use Icinga\Module\Inventory\Web\Url\UrlSigner;
 use Icinga\Web\UrlParams;
 use IMEdge\Json\JsonString;
 use IMEdge\RrdGraphInfo\GraphInfo;
 use IMEdge\Web\Grapher\Graph\ImedgeRrdGraph;
+use IMEdge\Web\Grapher\Structure\ExtendedRrdInfo;
+use IMEdge\Web\Rpc\IMEdgeClient;
 use ipl\Html\Html;
 use ipl\Html\HtmlDocument;
 
