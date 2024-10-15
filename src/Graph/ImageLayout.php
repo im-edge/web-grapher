@@ -201,10 +201,10 @@ class ImageLayout
         $params->set('lowerLimit', $this->lowerLimit);
 
         // Hint: we want to remove false booleans, instead of having them in the URL
-        $params->set('disableCached', $this->disableCached ? true: null);
-        $params->set('onlyGraph', $this->onlyGraph ? true: null);
-        $params->set('allowShrink', $this->allowShrink ? true: null);
-        $params->set('disableXAxis', $this->disableXAxis ? true: null);
+        $params->set('disableCached', $this->disableCached ? true : null);
+        $params->set('onlyGraph', $this->onlyGraph ? true : null);
+        $params->set('allowShrink', $this->allowShrink ? true : null);
+        $params->set('disableXAxis', $this->disableXAxis ? true : null);
     }
 
     public function __toString()
