@@ -3,8 +3,6 @@
 namespace IMEdge\Web\Grapher\GraphRendering;
 
 use gipfl\IcingaWeb2\Url;
-use Icinga\Module\Inventory\Data\Security\Keys; // TODO: move to other namespace
-use Icinga\Module\Inventory\Web\Url\UrlSigner;
 use Icinga\Web\UrlParams;
 use IMEdge\Json\JsonString;
 use IMEdge\RrdGraphInfo\GraphInfo;
@@ -73,20 +71,21 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
             'template' => $this->template,
         ]);
         $this->graph->applyToUrlParams($params);
-        $signer = new UrlSigner(Keys::getUrlSigningKey(), [
-            'width',
-            'height',
-            'start',
-            'end',
-            'rnd'
-        ]);
 
         $url = Url::fromPath($this->graphUrl);
         $url->setParams($params);
 
         return $url;
-// TODO: sign w/o destroying cache lifetime!
-        return $signer->sign($url, time() + 900);
+        // TODO: sign w/o destroying cache lifetime!
+        // $signer = new UrlSigner(Keys::getUrlSigningKey(), [
+        //     'width',
+        //     'height',
+        //     'start',
+        //     'end',
+        //     'rnd'
+        // ]);
+        //
+        // return $signer->sign($url, time() + 900);
     }
 
     protected function assemble()

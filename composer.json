@@ -29,7 +29,8 @@
         "ext-zlib": "*",
         "imedge/json": "^0.1.0",
         "imedge/rrd-graph-info": "^0.3",
-        "imedge/rrdgraph": "^0.4"
+        "imedge/rrdgraph": "^0.4",
+        "imedge/web-url-signing": "@dev"
     },
     "require-dev": {
         "gipfl/icingaweb2": ">=0.10",
