@@ -49,13 +49,21 @@ class ImageDimensions
 
     public static function fromUrlParams(UrlParams $params): ImageDimensions
     {
-        return new ImageDimensions($params->get('width'), $params->get('height'));
+        $dimensions = new ImageDimensions();
+        $dimensions->applyUrlParams($params);
+        return $dimensions;
     }
 
     public function applyUrlParams(UrlParams $params): void
     {
-        $this->setWidth($params->get('width'));
-        $this->setHeight($params->get('height'));
+        $width = $params->get('width');
+        $height = $params->get('height');
+        if (ctype_digit($width)) {
+            $this->setWidth((int) $width);
+        }
+        if (ctype_digit($height)) {
+            $this->setHeight((int) $height);
+        }
     }
 
     public function applyToUrlParams(UrlParams $params)
