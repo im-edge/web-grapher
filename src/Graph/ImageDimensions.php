@@ -3,6 +3,7 @@
 namespace IMEdge\Web\Grapher\Graph;
 
 use Icinga\Web\UrlParams;
+use InvalidArgumentException;
 
 class ImageDimensions
 {
@@ -60,9 +61,13 @@ class ImageDimensions
         $height = $params->get('height');
         if (ctype_digit($width)) {
             $this->setWidth((int) $width);
+        } elseif ($width !== null && $width !== '') {
+            throw new InvalidArgumentException('Got invalid width: ' . $width);
         }
         if (ctype_digit($height)) {
             $this->setHeight((int) $height);
+        } elseif ($height !== null && $height !== '') {
+            throw new InvalidArgumentException('Got invalid height: ' . $height);
         }
     }
 
