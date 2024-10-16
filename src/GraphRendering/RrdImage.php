@@ -24,7 +24,7 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
     public array $fileInfos = [];
     protected IMEdgeClient $client;
     protected bool $loadImmediately = false;
-    protected string $graphUrl = 'inventory/graph';
+    protected string $graphUrl = 'imedge/graph'; // TODO: Parameter?
     protected string $template;
     protected ?GraphInfo $graphInfo = null;
 
