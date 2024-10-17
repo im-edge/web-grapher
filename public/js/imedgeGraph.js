@@ -210,7 +210,7 @@ ImedgeGraph.prototype = {
         if (timestamp && this.showsTimestamp(timestamp)) {
             if (this.$cursor === null) {
                 this.$cursor = $('<div class="rrd-cursor"></div>');
-                this.$element.append(this.$cursor);
+                this.$canvas.append(this.$cursor);
             }
             const x = this.getTimeOffset(timestamp);
             this.$cursor.css({
