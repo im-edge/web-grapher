@@ -311,8 +311,7 @@ ImedgeGraph.prototype = {
         return Math.round(time / step) * step;
     },
 
-    getStepSizeForDuration: function (duration)
-    {
+    getStepSizeForDuration: function (duration) {
         if (duration < 60 * 70) {
             return 1;
         } else if (duration < 3600 * 25) {

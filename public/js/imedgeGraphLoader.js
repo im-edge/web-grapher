@@ -56,8 +56,7 @@ ImedgeGraphLoader.prototype = {
         return request;
     },
 
-    tellGraphAboutExpectedParams: function (rrdGraph, expectedParams)
-    {
+    tellGraphAboutExpectedParams: function (rrdGraph, expectedParams) {
         if (expectedParams.start) {
             rrdGraph.setExpectedStart(expectedParams.start)
         }
