@@ -62,6 +62,9 @@ ImedgeGraphHandler.prototype = {
 
     colorSchemeChanged: function () {
         this.forceReloadAll();
+        $('.imege-graph.fullscreen').css({
+            background: this.window.getInheritedBackgroundColor($('#col1')[0])
+        });
     },
 
     toggleFullscreen: function (graph) {
