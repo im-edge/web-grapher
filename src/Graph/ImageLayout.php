@@ -197,14 +197,37 @@ class ImageLayout
 
     public function applyToUrlParams(UrlParams $params)
     {
-        $params->set('upperLimit', $this->upperLimit);
-        $params->set('lowerLimit', $this->lowerLimit);
+        if ($this->upperLimit === null) {
+            $params->remove('upperLimit');
+        } else {
+            $params->set('upperLimit', $this->upperLimit);
+        }
+        if ($this->lowerLimit === null) {
+            $params->remove('lowerLimit');
+        } else {
+            $params->set('lowerLimit', $this->lowerLimit);
+        }
 
-        // Hint: we want to remove false booleans, instead of having them in the URL
-        $params->set('disableCached', $this->disableCached ? true : null);
-        $params->set('onlyGraph', $this->onlyGraph ? true : null);
-        $params->set('allowShrink', $this->allowShrink ? true : null);
-        $params->set('disableXAxis', $this->disableXAxis ? true : null);
+        if ($this->disableCached === false) {
+            $params->remove('disableCached');
+        } else {
+            $params->set('disableCached', true);
+        }
+        if ($this->onlyGraph === false) {
+            $params->remove('onlyGraph');
+        } else {
+            $params->set('onlyGraph', true);
+        }
+        if ($this->allowShrink === false) {
+            $params->remove('allowShrink');
+        } else {
+            $params->set('allowShrink', true);
+        }
+        if ($this->disableXAxis === false) {
+            $params->remove('disableXAxis');
+        } else {
+            $params->set('disableXAxis', true);
+        }
     }
 
     public function __toString()
