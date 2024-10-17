@@ -2,9 +2,6 @@
 const ImedgeGraph = function ($element) {
     this.$element = $element;
     this.$canvas = $element.find('.imedge-graph-canvas');
-    console.log('Canvas');
-    console.log($element);
-    console.log(this.$canvas);
     this.$imgElement = $element.find('.imedge-graph-img');
     this.$cursor = null;
     this.id = $element.attr('id');
