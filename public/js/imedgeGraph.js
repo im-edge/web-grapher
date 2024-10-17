@@ -110,7 +110,7 @@ ImedgeGraph.prototype = {
         // width: this.translatePosition(this.imageWidth) + 'px'
         //});
         if (reload) {
-            window.imedge.loader.loadGraph(this, {width: this.$imgElement.width()})
+            window.imedge.loader.loadGraph(this, this.getAvailableDimensions());
         }
     },
 
