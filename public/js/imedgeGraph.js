@@ -62,7 +62,8 @@ ImedgeGraph.prototype = {
         const graphData = this.$imgElement.data('graph');
         const imgData = this.$imgElement.data('image');
         if (typeof graphData === 'undefined') {
-            console.log('Graph has no data', this.$imgElement);
+            // Initial load w/o image ready
+            // console.log('Graph has no data', this.$imgElement);
             return;
         }
         this.top = graphData.top;
