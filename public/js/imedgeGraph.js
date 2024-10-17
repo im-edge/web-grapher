@@ -314,7 +314,7 @@ ImedgeGraph.prototype = {
         if (this.currentTimeStamp) {
             return this.currentTimeStamp;
         }
-        console.log('Has no current timestamp');
+        // console.log('Has no current timestamp');
 
         return Math.round(this.getEnd() - this.getDuration() / 2);
     },

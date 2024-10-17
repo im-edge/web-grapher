@@ -540,7 +540,7 @@ ImedgeGraphHandler.prototype = {
 
     refreshCursors: function () {
         const cursor = this.cursor;
-        console.log('refreshing cursors');
+        // console.log('refreshing cursors');
         $.each(this.graphs, function (idx, foundGraph) {
             foundGraph.refreshCursor(cursor);
         });
