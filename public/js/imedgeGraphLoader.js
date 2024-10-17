@@ -30,6 +30,7 @@ ImedgeGraphLoader.prototype = {
         if (typeof url === 'undefined') {
             return;
         }
+        tweakParams = rrdGraph.getAvailableDimensions(tweakParams);
         const requestedUrl = this.applyUrlParams(url, tweakParams);
         this.tellGraphAboutExpectedParams(rrdGraph, tweakParams);
         /*
