@@ -20,7 +20,8 @@ ImedgeIcingaLayout.prototype = {
         this.initializeContainer($('#col1'));
         this.initializeContainer($('#col2'));
         $(window).on('resize', this.checkForChangedWidth.bind(_this));
-        this.checkForChangedWidth(); // TODO: Check, whether this fires on load
+        this.checkForChangedWidth(false); // TODO: Check, whether this fires on load
+        // Hint -> should we should trigger a reload for sent/embedded images?
     },
 
     onChangedWidth: function (callback) {
