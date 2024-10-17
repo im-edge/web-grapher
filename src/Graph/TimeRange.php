@@ -156,9 +156,21 @@ class TimeRange
 
     public function applyToUrlParams(UrlParams $params)
     {
-        $params->set('start', $this->start);
-        $params->set('end', $this->end);
-        $params->set('step', $this->step);
+        if ($this->start === null) {
+            $params->remove('start');
+        } else {
+            $params->set('start', $this->start);
+        }
+        if ($this->end === null) {
+            $params->remove('end');
+        } else {
+            $params->set('end', $this->end);
+        }
+        if ($this->step === null) {
+            $params->remove('step');
+        } else {
+            $params->set('step', $this->step);
+        }
     }
 
     protected static function wantEpoch($time): int
