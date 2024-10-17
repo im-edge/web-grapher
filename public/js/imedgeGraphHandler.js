@@ -106,8 +106,14 @@ ImedgeGraphHandler.prototype = {
         const url = this.icinga.utils.parseUrl($a.attr('href'));
 
         if ($a.hasClass('imedge-toggle-fullscreen')) {
-            $a.removeClass('icon-resize-full');
-            $a.addClass('icon-resize-small');
+            if (graph.$element.hasClass('fullscreen')) {
+                $a.removeClass('icon-resize-small');
+                $a.addClass('icon-resize-full');
+            } else {
+                $a.removeClass('icon-resize-full');
+                $a.addClass('icon-resize-small');
+            }
+
             this.toggleFullscreen(graph);
             return false;
         }
