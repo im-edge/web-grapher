@@ -150,7 +150,7 @@ ImedgeGraphHandler.prototype = {
 
     forceReloadAll: function () {
         const _this = this;
-        this.graphs.each(function (idx, graph) {
+        $.each(this.graphs, function (idx, graph) {
             _this.loader.loadGraph(graph);
         });
     },
