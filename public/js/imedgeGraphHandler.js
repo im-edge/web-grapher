@@ -515,7 +515,7 @@ ImedgeGraphHandler.prototype = {
         }
         const ts = graph.getTimeForMouseEvent(event);
         if (! isFinite(ts)) {
-            // icinga.logger.error('Got no TS on', graph, 'for', event);
+            // this.icinga.logger.error('Got no TS on', graph, 'for', event);
             return;
         }
         this.cursor.show(ts);

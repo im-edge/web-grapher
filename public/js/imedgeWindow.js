@@ -13,10 +13,6 @@ const ImedgeWindow = function () {
     }
 };
 
-ImedgeWindow.pixel = function (value) {
-    return Math.round(value) + 'px';
-};
-
 ImedgeWindow.prototype = {
     detectBackgroundScheme: function () {
         return this.backgroundIsDark() ? 'dark' : 'light';

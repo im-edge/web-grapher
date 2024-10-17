@@ -26,10 +26,10 @@ ImedgeGraphSelection.prototype = {
                 $selection = $(this.tplSelection);
                 $graph.prepend($selection);
                 $selection.css({
-                    top: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getTop())),
-                    left: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getLeft())),
-                    height: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getHeight())),
-                    width: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getWidth()))
+                    top: this.pixel(this.graph.translatePosition(this.graph.getTop())),
+                    left: this.pixel(this.graph.translatePosition(this.graph.getLeft())),
+                    height: this.pixel(this.graph.translatePosition(this.graph.getHeight())),
+                    width: this.pixel(this.graph.translatePosition(this.graph.getWidth()))
                 });
             }
 
@@ -46,14 +46,14 @@ ImedgeGraphSelection.prototype = {
 
     adjustSelectionRectangles: function (left, right) {
         this.rectBefore.css({
-            'width': ImedgeWindow.pixel(this.graph.translatePosition(left))
+            'width': this.pixel(this.graph.translatePosition(left))
         });
         this.rectMain.css({
-            'left': ImedgeWindow.pixel(this.graph.translatePosition(left)),
-            'width': ImedgeWindow.pixel(this.graph.translatePosition(right - left))
+            'left': this.pixel(this.graph.translatePosition(left)),
+            'width': this.pixel(this.graph.translatePosition(right - left))
         });
         this.rectAfter.css({
-            'width': ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getWidth() - right))
+            'width': this.pixel(this.graph.translatePosition(this.graph.getWidth() - right))
         });
         if (this.isValidSelection()) {
             this.rectMain.removeClass('invalid');
@@ -71,5 +71,10 @@ ImedgeGraphSelection.prototype = {
             this.rectBefore = null;
             this.rectAfter = null;
         }
+    },
+
+    // Hint: duplicate
+    pixel: function (value) {
+        return Math.round(value) + 'px';
     }
 };

@@ -106,7 +106,7 @@ ImedgeGraph.prototype = {
         //console.log(this.$imgElement.width(), this.imageWidth, this.imageRatio);
         //this.$element.css({
         // This is currently required to limit our selection range
-        // height: ImedgeWindow.pixel(this.translatePosition(imgData.height)),
+        // height: this.pixel(this.translatePosition(imgData.height)),
         // width: this.translatePosition(this.imageWidth) + 'px'
         //});
         if (reload) {
@@ -134,6 +134,11 @@ ImedgeGraph.prototype = {
         this.debug('...' /*' t=' + this.top + ' l=' + this.left + ' w=' + this.width + ' h=' + this.height*/);
     },
 
+    // Hint: duplicate
+    pixel: function (value) {
+        return Math.round(value) + 'px';
+    },
+
     debug: function (text) {
         if (this.getHeight() < 40) {
             return;
@@ -152,9 +157,9 @@ ImedgeGraph.prototype = {
         $el.css({
             // top: (this.top - 1) + 'px',
             // -> 1.5 -> 0.5 + 1px border
-            top: ImedgeWindow.pixel((this.translatePosition(this.top + this.height) - lineHeight)),
-            left: ImedgeWindow.pixel((this.translatePosition(this.left) + spaceOnSides)),
-            right: ImedgeWindow.pixel((this.translatePosition(this.imageWidth - this.left - this.width) - spaceOnSides)),
+            top: this.pixel((this.translatePosition(this.top + this.height) - lineHeight)),
+            left: this.pixel((this.translatePosition(this.left) + spaceOnSides)),
+            right: this.pixel((this.translatePosition(this.imageWidth - this.left - this.width) - spaceOnSides)),
             textAlign: 'right'
         });
         // $el.html(l.toLocaleString() + ' - ' + r.toLocaleString() + '(' + d.toLocaleString() + '): ' + text);
@@ -209,9 +214,9 @@ ImedgeGraph.prototype = {
             }
             const x = this.getTimeOffset(timestamp);
             this.$cursor.css({
-                left: ImedgeWindow.pixel(this.translatePosition(x)),
-                top: ImedgeWindow.pixel(this.translatePosition(this.getTop())),
-                height: ImedgeWindow.pixel(this.translatePosition(this.getHeight()))
+                left: this.pixel(this.translatePosition(x)),
+                top: this.pixel(this.translatePosition(this.getTop())),
+                height: this.pixel(this.translatePosition(this.getHeight()))
             });
             this.currentTimeStamp = Math.round(timestamp);
 
