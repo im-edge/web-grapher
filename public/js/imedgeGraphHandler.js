@@ -60,14 +60,28 @@ ImedgeGraphHandler.prototype = {
 
     toggleFullscreen: function (graph) {
         const $element = graph.$element;
-        $element.detach().appendTo($('#layout')).css({
-            position: 'absolute',
-            zIndex: 1000,
-            top: 0, left: 0,
-            height: '100vh',
-            background: this.window.getInheritedBackgroundColor($('#col1')[0])
-        });
-        $element.addClass('fullscreen');
+        if ($element.hasClass('fullscreen')) {
+            $element.detach().appendTo($element.originalParent).css({
+                position: 'unset',
+                zIndex: 'unset',
+                top: 'unset',
+                left: 'unset',
+                height: '100%',
+                background: 'unset'
+            });
+            delete($element.originalParent);
+            $element.removeClass('fullscreen');
+        } else {
+            $element.originalParent = $element.parent();
+            $element.detach().appendTo($('#layout')).css({
+                position: 'absolute',
+                zIndex: 1000,
+                top: 0, left: 0,
+                height: '100vh',
+                background: this.window.getInheritedBackgroundColor($('#col1')[0])
+            });
+            $element.addClass('fullscreen');
+        }
         const $canvas = $element.canvas;
         this.loader.loadGraph(graph, {
             width: Math.floor($canvas.width()),
