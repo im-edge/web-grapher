@@ -94,14 +94,15 @@ ImedgeGraph.prototype = {
 
     checkForChangedWidth: function (reload = true) {
         this.imageRatio = this.$imgElement.width() / this.imageWidth;
-        return;
         //console.log(this.$imgElement.width(), this.imageWidth, this.imageRatio);
         //this.$element.css({
         // This is currently required to limit our selection range
         // height: pixel(this.translatePosition(imgData.height)),
         // width: this.translatePosition(this.imageWidth) + 'px'
         //});
-        window.rrd.loader.loadGraph(this, {width: this.$imgElement.width()})
+        if (reload) {
+            window.rrd.loader.loadGraph(this, {width: this.$imgElement.width()})
+        }
     },
 
     translatePosition: function (pos) {
