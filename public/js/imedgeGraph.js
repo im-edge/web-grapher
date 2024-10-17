@@ -80,11 +80,20 @@ ImedgeGraph.prototype = {
         // this.refreshDebug();
     },
 
-    getAvailableDimensions: function () {
-        return {
-            width: Math.round(this.$canvas.width()),
-            height: Math.round(this.$canvas.height()),
-        };
+    getAvailableDimensions: function (result = {}) {
+        const width = Math.round(this.$canvas.width());
+        const height = Math.round(this.$canvas.height());
+        if (width > 0) {
+            result.width = width;
+        } else {
+            console.log('Got invalid width from Canvas: ' + this.$canvas.width());
+        }
+        if (height > 0) {
+            result.height = height;
+        } else {
+            console.log('Got invalid width from Canvas: ' + this.$canvas.height());
+        }
+        return result;
     },
 
     layoutChanged: function () {

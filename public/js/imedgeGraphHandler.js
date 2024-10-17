@@ -82,11 +82,7 @@ ImedgeGraphHandler.prototype = {
             });
             $element.addClass('fullscreen');
         }
-        const $canvas = graph.$canvas;
-        this.loader.loadGraph(graph, {
-            width: Math.floor($canvas.width()),
-            height: Math.floor($canvas.height()),
-        });
+        this.loader.loadGraph(graph, graph.getAvailableDimensions());
     },
 
     linkClicked: function (e) {
@@ -124,14 +120,8 @@ ImedgeGraphHandler.prototype = {
                 adjust[param.key] = param.value
             }
         });
-        const width = graph.$canvas.width();
-        const height = graph.$canvas.height();
-        if (width) {
-            adjust['width'] = Math.floor(width);
-        }
-        if (height) {
-            adjust['height'] = Math.floor(height);
-        }
+        adjust = graph.getAvailableDimensions(adjust);
+
         if ($.isEmptyObject(adjust)) {
             console.log('no adjustment')
             console.log(url);
