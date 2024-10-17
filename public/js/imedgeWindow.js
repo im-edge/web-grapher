@@ -60,9 +60,11 @@ ImedgeWindow.prototype = {
     darkModeActivated: function () {
         this.backgroundScheme = this.detectBackgroundScheme();
         this.colorScheme = 'dark';
+        $('#layout').trigger('imedge-color-scheme-change');
     },
     lightModeActivated: function () {
         this.backgroundScheme = this.detectBackgroundScheme();
         this.colorScheme = 'light';
+        $('#layout').trigger('imedge-color-scheme-change');
     }
 };

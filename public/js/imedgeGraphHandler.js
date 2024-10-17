@@ -47,6 +47,8 @@ ImedgeGraphHandler.prototype = {
         $(document).on('rendered', '.container', this.containerRendered.bind(this));
         $(document).on('close-column', '.container', this.containerRendered.bind(this));
         $(document).on('click', '.imedge-graph a', this.linkClicked.bind(this));
+        $(document).on('imedge-color-scheme-change', '#layout', this.colorSchemeChanged.bind(this));
+
         setTimeout(this.registerNewGraphs.bind(this), 0);
         // this.loadAllGraphs();
         setInterval(this.registerNewGraphs.bind(this), 1000);
@@ -56,6 +58,10 @@ ImedgeGraphHandler.prototype = {
         this.registerNewGraphs();
         this.forgetObsoleteGraphs();
         // this.loadAllGraphs();
+    },
+
+    colorSchemeChanged: function () {
+        this.forceReloadAll();
     },
 
     toggleFullscreen: function (graph) {
@@ -140,6 +146,13 @@ ImedgeGraphHandler.prototype = {
             }
         }
         return false;
+    },
+
+    forceReloadAll: function () {
+        const _this = this;
+        this.graphs.each(function (idx, graph) {
+            _this.loader.loadGraph(graph);
+        });
     },
 
     scroll: function (event) {
