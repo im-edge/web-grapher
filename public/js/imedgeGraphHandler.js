@@ -82,7 +82,7 @@ ImedgeGraphHandler.prototype = {
             });
             $element.addClass('fullscreen');
         }
-        const $canvas = $element.canvas;
+        const $canvas = graph.$canvas;
         this.loader.loadGraph(graph, {
             width: Math.floor($canvas.width()),
             height: Math.floor($canvas.height()),
