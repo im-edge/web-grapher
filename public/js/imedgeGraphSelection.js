@@ -18,7 +18,7 @@ ImedgeGraphSelection.prototype = {
         this.getSelection().append(this.rectAfter, this.rectMain, this.rectBefore);
     },
 
-    getSelection: function() {
+    getSelection: function () {
         if (typeof(this.$selection) === 'undefined' || this.$selection === null) {
             const $graph = this.graph.$canvas;
             let $selection = $graph.find('.rrd-selection');
@@ -26,10 +26,10 @@ ImedgeGraphSelection.prototype = {
                 $selection = $(this.tplSelection);
                 $graph.prepend($selection);
                 $selection.css({
-                    top: pixel(this.graph.translatePosition(this.graph.getTop())),
-                    left: pixel(this.graph.translatePosition(this.graph.getLeft())),
-                    height: pixel(this.graph.translatePosition(this.graph.getHeight())),
-                    width: pixel(this.graph.translatePosition(this.graph.getWidth()))
+                    top: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getTop())),
+                    left: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getLeft())),
+                    height: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getHeight())),
+                    width: ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getWidth()))
                 });
             }
 
@@ -46,14 +46,14 @@ ImedgeGraphSelection.prototype = {
 
     adjustSelectionRectangles: function (left, right) {
         this.rectBefore.css({
-            'width': pixel(this.graph.translatePosition(left))
+            'width': ImedgeWindow.pixel(this.graph.translatePosition(left))
         });
         this.rectMain.css({
-            'left': pixel(this.graph.translatePosition(left)),
-            'width': pixel(this.graph.translatePosition(right - left))
+            'left': ImedgeWindow.pixel(this.graph.translatePosition(left)),
+            'width': ImedgeWindow.pixel(this.graph.translatePosition(right - left))
         });
         this.rectAfter.css({
-            'width': pixel(this.graph.translatePosition(this.graph.getWidth() - right))
+            'width': ImedgeWindow.pixel(this.graph.translatePosition(this.graph.getWidth() - right))
         });
         if (this.isValidSelection()) {
             this.rectMain.removeClass('invalid');

@@ -1,10 +1,6 @@
 (function (window, $) {
     'use strict';
 
-    const pixel = function (value) {
-        return Math.round(value) + 'px';
-    };
-
     let startup;
     let attempt = 0;
     const w = window;

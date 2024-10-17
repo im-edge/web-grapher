@@ -57,7 +57,9 @@ ImedgeWindow.prototype = {
         document.head.removeChild(div)
         return bg
     },
-
+    pixel: function (value) {
+        return Math.round(value) + 'px';
+    },
     darkModeActivated: function () {
         this.backgroundScheme = this.detectBackgroundScheme();
         this.colorScheme = 'dark';
