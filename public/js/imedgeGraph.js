@@ -40,7 +40,7 @@ ImedgeGraph.prototype = {
     getSelection: function () {
         if (this.selection === false) {
             this.$element.addClass('selecting');
-            this.selection = new ImmedgeGraphSelection(this);
+            this.selection = new ImedgeGraphSelection(this);
         }
 
         return this.selection;
