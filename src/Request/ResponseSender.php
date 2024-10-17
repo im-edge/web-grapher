@@ -58,6 +58,12 @@ class ResponseSender
     public function sendError($error, int $width, int $height)
     {
         $image = new ErrorImage($error);
+        if ($width < 1) {
+            $width = 640;
+        }
+        if ($height < 1) {
+            $height = 480;
+        }
         // $image->showStackTrace();
         $this->sendNoCacheHeaders();
         if ($this->useXhr) {
