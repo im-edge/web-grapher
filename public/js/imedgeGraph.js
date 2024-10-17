@@ -123,7 +123,13 @@ ImedgeGraph.prototype = {
     },
 
     getUrl: function () {
-        return this.$element.data('rrdUrl');
+        const url = this.$element.data('rrdUrl');
+        if (typeof url === 'undefined') {
+            // On initial load only
+            return this.$imgElement.data('rrdUrl');
+        }
+
+        return url;
     },
 
     getElement: function () {
