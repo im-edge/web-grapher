@@ -123,7 +123,7 @@ ImedgeGraph.prototype = {
     },
 
     getUrl: function () {
-        return this.$imgElement.data('rrdUrl');
+        return this.$element.data('rrdUrl');
     },
 
     getElement: function () {
