@@ -103,6 +103,7 @@ ImedgeGraph.prototype = {
         } else {
             $graph.children('.imedge-graph-legend').html('');
         }
+        this.$canvas.find('.rrd-selection').remove();
         if (typeof graphDimensions === 'undefined') {
             console.error('Result has no graph data: ', requestedUrl);
             return;
