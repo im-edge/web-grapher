@@ -1,4 +1,5 @@
-const ImedgeGraph = function ($element) {
+const ImedgeGraph = function ($element, imedgeWindow) {
+    this.windows = imedgeWindow;
     this.graphDimensions = {
         top: null,
         left: null,
@@ -143,7 +144,7 @@ ImedgeGraph.prototype = {
     },
 
     applyColorScheme: function (result = {}) {
-        return result.colorScheme = this.graphHandler.window.colorScheme;
+        return result.colorScheme = this.window.colorScheme;
     },
 
     layoutChanged: function () {

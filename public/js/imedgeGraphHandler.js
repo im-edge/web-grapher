@@ -461,7 +461,7 @@ ImedgeGraphHandler.prototype = {
         $graph.addClass('imedge-graph-registered');
         // const $debug = $('<div class="rrd-debug"></div>').hide();
         // $graph.append($debug);
-        const graph = new ImedgeGraph($graph);
+        const graph = new ImedgeGraph($graph, this.window);
         this.graphs[id] = graph;
         if (graph.$imgElement.data('preLoaded')) {
             this.loader.loadGraph(graph);
