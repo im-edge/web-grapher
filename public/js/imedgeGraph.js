@@ -1,5 +1,5 @@
 const ImedgeGraph = function ($element, imedgeWindow) {
-    this.windows = imedgeWindow;
+    this.window = imedgeWindow;
     this.graphDimensions = {
         top: null,
         left: null,
