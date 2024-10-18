@@ -142,6 +142,10 @@ ImedgeGraph.prototype = {
         return result;
     },
 
+    applyColorScheme: function (result = {}) {
+        return result.colorScheme = this.graphHandler.window.colorScheme;
+    },
+
     layoutChanged: function () {
         this.checkForChangedWidth();
     },

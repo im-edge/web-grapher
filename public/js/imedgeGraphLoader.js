@@ -32,9 +32,9 @@ ImedgeGraphLoader.prototype = {
             return;
         }
         tweakParams = graph.getAvailableDimensions(tweakParams);
+        tweakParams = graph.applyColorScheme(tweakParams);
         url = this.applyUrlParams(url, tweakParams);
         if (url === graph.getActiveUrl()) {
-            console.log('expected is active');
             return; // TODO: force if scheme changed?
         }
         graph.setExpectedUrl(url); // Remains the same, if tweak is empty
