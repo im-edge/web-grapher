@@ -91,7 +91,7 @@ ImedgeGraphHandler.prototype = {
             });
             $element.addClass('fullscreen');
         }
-        this.loader.loadGraph(graph, graph.getAvailableDimensions());
+        this.loader.loadGraph(graph);
     },
 
     linkClicked: function (e) {

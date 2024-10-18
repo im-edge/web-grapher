@@ -13,6 +13,7 @@ const ImedgeGraphLoader = function (imedgeGraphHandler) {
     this.deferredRequests = {};
     this.deferredTimers = {};
     this.dirtyGraphs = {};
+    this.dirtyQueue = [];
     this.loadingGraphs = {};
     this.initialize();
 };
@@ -25,39 +26,59 @@ ImedgeGraphLoader.prototype = {
         this.triggerLoading();
     },
 
-    loadGraph: function (rrdGraph, tweakParams) {
-        let url = rrdGraph.getUrl();
+    loadGraph: function (graph, tweakParams) {
+        let url = graph.getUrl();
         if (typeof url === 'undefined') {
+            // Cannot load a graph with no Url
             return;
         }
-        tweakParams = rrdGraph.getAvailableDimensions(tweakParams);
+        tweakParams = graph.getAvailableDimensions(tweakParams);
         const requestedUrl = this.applyUrlParams(url, tweakParams);
-        this.tellGraphAboutExpectedParams(rrdGraph, tweakParams);
-        if (requestedUrl === rrdGraph.getUrl()) {
-            return;
+        this.tellGraphAboutExpectedParams(graph, tweakParams);
+        if (requestedUrl === graph.getUrl()) {
+            return; // TODO: force if scheme changed?
         }
-        /*
-        // Doesn't work, SNMP is on another node UUID (not Metric)
-        let sendUrl = requestedUrl;
-        if (rrdGraph.getDuration() === 0 && rrdGraph.endsNow()) {
-            this.applyUrlParams(sendUrl, {triggerScenario: 'interfaceTraffic'});
-        }
-        */
 
+        this.markDirty(graph);
+    },
+
+    reallyLoadGraph: function (graph, url) {
+        this.tellGraphAboutExpectedParams(rrdGraph, tweakParams);
         let request = $.ajax({
-            url: requestedUrl,
+            url: url,
             cache: true,
             headers: {
                 'X-IMEdge-ColorScheme':  (this.graphHandler.window.colorScheme)
             }
         });
-        request.done(this.handleGraphResult.bind(this));
-        // request.fail(this.onFailure);
-        // request.always(this.onComplete);
-        request.rrdGraph = rrdGraph;
-        request.requestedUrl = requestedUrl;
+        request.success(this.loadingSucceeded.bind(this));
+        request.error(this.loadingFailed.bind(this))
+        request.complete(this.loadingCompleted.bind(this));
+        request.rrdGraph = graph;
+        request.requestedUrl = url;
+        this.loadingGraphs[graph.getId()] = request;
+        // Doesn't work, SNMP is on another node UUID (not Metric)
+        // if (graph.getDuration() === 0 && graph.endsNow()) {
+        //     this.applyUrlParams(url, {triggerScenario: 'interfaceTraffic'});
+        // }
 
         return request;
+    },
+
+    loadingSucceeded: function (result, textStatus, request) {
+        const graph = request.graph;
+        graph.setDataFromResult(request.requestedUrl, result);
+        this.addGraphSettingsToContainerUrl(graph);
+    },
+
+    loadingFailed: function (request, status, error) {
+        console.log('Loading ' + request.requestedUrl + ' failed (' + status + '): ' + error);
+    },
+
+    loadingCompleted: function (request, status) {
+        const graph = request.graph;
+        const idx = graph.getId();
+        delete(this.loadingGraphs[idx]);
     },
 
     tellGraphAboutExpectedParams: function (rrdGraph, expectedParams) {
@@ -70,38 +91,39 @@ ImedgeGraphLoader.prototype = {
     },
 
     markDirty: function (graph) {
-        this.dirtyGraphs[graph.getId()] = graph;
+        const id = graph.getId();
+        if (id in this.dirtyGraphs) {
+            return;
+        }
+        this.dirtyGraphs[id] = graph;
+        this.dirtyQueue.push(id)
         this.triggerLoading();
     },
 
     triggerLoading: function () {
         const _this = this;
-        $.each(this.dirtyGraphs, function (idx, rrdGraph) {
-            let loading = _this.loadingGraphs;
-            if (typeof loading[idx] === 'undefined') {
-                loading[idx] = _this.loadGraph(rrdGraph);
-                console.log('Loading', idx);
-            } else {
-                if (! _this.dirtyGraphs[idx].wantsUrl(loading[id].requestedUrl)) {
-                    loading[idx].cancel();
-                    loading[idx] = _this.loadGraph(rrdGraph);
-                    console.log('URL changed', idx);
-                } else {
-                    console.log('URL stays the same:', idx);
-                }
+        let id, graph;
+        while (this.dirtyQueue.length) {
+            id = this.dirtyQueue.shift();
+            graph = this.dirtyGraphs[id];
+            if (typeof graph === 'undefined') {
+                // already processed via dirtyQueue
+                continue;
             }
-        });
-    },
-
-    finishLoading: function (rrdGraph, requestedUrl, result) {
-        const idx = rrdGraph.getId();
-        if (idx in this.dirtyGraphs && this.dirtyGraphs[idx].wantsUrl(requestedUrl)) {
-            delete(this.dirtyGraphs[idx]);
+            delete(this.dirtyGraphs[id]);
+            graph = this.graphs[id];
+            if (typeof graph === 'undefined') {
+                // graph has been destroyed in the meantime
+                continue;
+            }
+            if (!graph.stillExists()) {
+                // graph vanished from DOM, not (yet) destroyed
+                continue;
+            }
+            if (graph.getUrl() !== graph.getExpectedUrl()) {
+                this.reallyLoadGraph(graph, graph.getExpectedUrl())
+            }
         }
-        // This used to be commented out?!
-        delete(this.loadingGraphs[idx]);
-        rrdGraph.setDataFromResult(requestedUrl, result);
-        this.addGraphSettingsToContainerUrl(rrdGraph);
     },
 
     addGraphSettingsToContainerUrl: function (rrdGraph) {
@@ -116,17 +138,9 @@ ImedgeGraphLoader.prototype = {
         $container.find('>.controls a.refresh-container-control').attr('href', newUrl);
         $container.data({icingaUrl: newUrl});
         if (typeof window.icinga !== 'undefined') {
-            window.icinga.history.pushCurrentState();
+            // We decided do not pollute history, as we have way too many requests
+            // window.icinga.history.pushCurrentState();
         }
-    },
-
-    failLoading: function (idx) {
-        delete(this.loadingGraphs[idx]);
-    },
-
-    handleGraphResult: function (result, textStatus, request) {
-        const rrdGraph = request.rrdGraph;
-        this.finishLoading(rrdGraph, request.requestedUrl, result);
     },
 
     applyUrlParams(url, params) {

@@ -1,20 +1,31 @@
 
 const ImedgeGraph = function ($element) {
+    this.graphDimensions = {
+        top: null,
+        left: null,
+        width: null,
+        height: null,
+        start: null,
+        end: null,
+    };
+    this.imageDimensions = {
+        width: null,
+        height: null,
+    };
+    this.valueRange = {
+        min: null,
+        max: null,
+    };
     this.$element = $element;
     this.$canvas = $element.find('.imedge-graph-canvas');
     this.$imgElement = $element.find('.imedge-graph-img');
     this.$cursor = null;
     this.id = $element.attr('id');
-    this.top = null;
-    this.left = null;
-    this.width = null;
-    this.height = null;
-    this.start = null;
-    this.end = null;
+
+    this.url = null;
+    this.expectedUrl = null;
     this.expectedStart = null;
     this.expectedEnd = null;
-    this.imageWidth = null;
-    this.imageHeight = null;
     this.imageRatio = 1;
     this.currentTimeStamp = null;
     this.selection = false;
@@ -25,9 +36,7 @@ const ImedgeGraph = function ($element) {
 ImedgeGraph.prototype = {
     initialize: function () {
         const _this = this;
-        this.$element.data('graph', this.$imgElement.data('graph'));
-        this.$element.data('image', this.$imgElement.data('image'));
-        this.refreshFromData();
+        this.refreshFromImageData();
         this.checkForChangedWidth();
         $(window).on('resize', this.checkForChangedWidth.bind(_this));
         $('#layout').on('layout-change', this.layoutChanged.bind(_this));
@@ -55,34 +64,63 @@ ImedgeGraph.prototype = {
     },
 
     hasImage: function () {
-        return this.top !== null;
+        return this.getTop() !== null;
     },
 
-    refreshFromData: function () {
-        const graphData = this.$element.data('graph');
-        const imgData = this.$element.data('image');
-        if (typeof graphData === 'undefined') {
-            // Initial load w/o image ready
-            // console.log('Graph has no data', this.$imgElement);
+    refreshFromImageData: function () {
+        const graphDimensions = this.$imgElement.data('graph');
+        if (typeof graphDimensions === 'undefined') {
+            this.requestedUrl = this.$imgElement.data('rrdUrl');
+            // Image has not been preloaded
             return;
         }
-        this.top = graphData.top;
-        this.left = graphData.left;
-        this.width = graphData.width;
-        this.height = graphData.height;
-        this.start = graphData.start;
-        this.end = graphData.end;
-        this.imageWidth = imgData.width;
-        this.imageHeight = imgData.height;
+        const imageDimensions = this.$imgElement.data('image');
+        if (typeof imageDimensions === 'undefined') {
+            console.log('Got graphData, but no imageData')
+            return;
+        }
+        this.graphDimensions = graphDimensions;
+        this.imageDimensions = imageDimensions;
         this.clearSelection();
         this.checkForChangedWidth(false);
         this.debug('From fresh data');
-        // this.refreshDebug();
+    },
+
+    setDataFromResult: function (requestedUrl, result) {
+        const $graph = this.$element;
+        const $img = this.$imgElement;
+        const graphDimensions = result['graph'];
+        const imageDimensions = result['image'];
+        const description = result['description'];
+        if (typeof description !== 'undefined') {
+            $graph.children('.imedge-graph-legend').html(description)
+        } else {
+            $graph.children('.imedge-graph-legend').html('');
+        }
+        if (typeof graphDimensions === 'undefined') {
+            console.error('Result has no graph data: ', requestedUrl);
+            return;
+        }
+        if (typeof imageDimensions === 'undefined') {
+            console.error('Result has no image data: ', requestedUrl);
+            return;
+        }
+
+        this.graphDimensions = graphDimensions;
+        this.imageDimensions = imageDimensions;
+        this.valueRange = result['value'];
+
+        const img = new Image(); // create temporary image
+        img.src = result['raw']; // add your new image as src on the temporary image
+        img.decode().then(() => { // wait until temporary image is decoded
+            $img.attr('src', img.src); // replace your actual element now
+        });
+        this.url = requestedUrl;
     },
 
     getAvailableDimensions: function (result = {}) {
-        const width = Math.round(this.$canvas.width());
-        const height = Math.round(this.$canvas.height());
+        const width = Math.floor(this.$canvas.width());
+        const height = Math.floor(this.$canvas.height());
         if (width > 0) {
             result.width = width;
         } else {
@@ -93,23 +131,18 @@ ImedgeGraph.prototype = {
         } else {
             console.log('Got invalid width from Canvas: ' + this.$canvas.height());
         }
+
         return result;
     },
 
     layoutChanged: function () {
-        console.log('IMEdge detected layout change');
         this.checkForChangedWidth();
     },
 
     checkForChangedWidth: function (reload = true) {
-        this.imageRatio = this.$imgElement.width() / this.imageWidth;
-        //console.log(this.$imgElement.width(), this.imageWidth, this.imageRatio);
-        //this.$element.css({
-        // This is currently required to limit our selection range
-        // height: this.pixel(this.translatePosition(imgData.height)),
-        // width: this.translatePosition(this.imageWidth) + 'px'
-        //});
-        if (reload) {
+        const oldRatio = this.imageRatio;
+        this.imageRatio = this.$imgElement.width() / this.imageDimensions.width;
+        if (reload && (Math.floor(oldRatio * 1000) !== Math.floor(this.imageRatio / 1000))) {
             window.imedge.loader.loadGraph(this, this.getAvailableDimensions());
         }
     },
@@ -123,13 +156,15 @@ ImedgeGraph.prototype = {
     },
 
     getUrl: function () {
-        const url = this.$element.data('rrdUrl');
-        if (typeof url === 'undefined') {
-            // On initial load only
-            return this.$imgElement.data('rrdUrl');
-        }
+        return this.url;
+    },
 
-        return url;
+    setExpectedUrl: function (url) {
+        this.expectedUrl = url;
+    },
+
+    getExpectedUrl: function () {
+        return this.applyUrlParams(this.expectedUrl, this.getAvailableDimensions());
     },
 
     getElement: function () {
@@ -160,12 +195,13 @@ ImedgeGraph.prototype = {
         const fontSize = window.icinga.ui.getDefaultFontSize();
         const lineHeight = fontSize * 1.2;
         const spaceOnSides = 0.75;
+        const right = this.translatePosition(
+            this.imageDimensions.width - this.getLeft() - this.getWidth()
+        ) - spaceOnSides;
         $el.css({
-            // top: (this.top - 1) + 'px',
-            // -> 1.5 -> 0.5 + 1px border
-            top: this.pixel((this.translatePosition(this.top + this.height) - lineHeight)),
-            left: this.pixel((this.translatePosition(this.left) + spaceOnSides)),
-            right: this.pixel((this.translatePosition(this.imageWidth - this.left - this.width) - spaceOnSides)),
+            top: this.pixel((this.translatePosition(this.getTop() + this.getHeight()) - lineHeight)),
+            left: this.pixel((this.translatePosition(this.getLeft()) + spaceOnSides)),
+            right: this.pixel(right),
             textAlign: 'right'
         });
         // $el.html(l.toLocaleString() + ' - ' + r.toLocaleString() + '(' + d.toLocaleString() + '): ' + text);
@@ -255,30 +291,27 @@ ImedgeGraph.prototype = {
     },
 
     getTop: function () {
-        return this.top;
+        return this.graphDimensions.top;
     },
 
     getLeft: function () {
-        return this.left;
+        return this.graphDimensions.left;
     },
 
     getWidth: function () {
-        return this.width;
+        return this.graphDimensions.width;
     },
 
     getHeight: function () {
-        if (typeof(this.height) === 'undefined') {
-            return null;
-        }
-        return this.height;
+        return this.graphDimensions.height;
     },
 
     getStart: function () {
-        return this.start;
+        return this.graphDimensions.start;
     },
 
     getEnd: function () {
-        return this.end;
+        return this.graphDimensions.end;
     },
 
     endsNow: function () {
@@ -295,11 +328,11 @@ ImedgeGraph.prototype = {
     },
 
     getExpectedStart: function () {
-        return this.expectedStart || this.start;
+        return this.expectedStart || this.getStart();
     },
 
     getExpectedEnd: function () {
-        return this.expectedEnd || this.end;
+        return this.expectedEnd || this.getEnd();
     },
 
     setExpectedStart: function (start) {
@@ -341,37 +374,5 @@ ImedgeGraph.prototype = {
         } else {
             return 86400;
         }
-    },
-
-    setDataFromResult: function (requestedUrl, result) {
-        const $graph = this.$element;
-        const $img = this.$imgElement;
-        const graph = result['graph'];
-        const image = result['image'];
-        const description = result['description'];
-        if (typeof description !== 'undefined') {
-            $graph.children('.imedge-graph-legend').html(description)
-        } else {
-            $graph.children('.imedge-graph-legend').html('');
-        }
-        if (typeof graph === 'undefined') {
-            console.error('Result has no graph data:', requestedUrl);
-            return;
-        }
-        $graph.data('graph', graph);
-        $graph.data('image', image);
-        $graph.data('value', result['value']);
-
-        const img = new Image(); // create temporary image
-        img.src = result['raw']; // add your new image as src on the temporary image
-        img.decode().then(() => { // wait until temporary image is decoded
-            $img.attr('src', img.src); // replace your actual element now
-            if (image.height > 0) {
-                // $img.css({height: image.height + 'px'});
-            }
-        });
-//            $img.attr('src', result['raw']);
-        $graph.data('rrdUrl', requestedUrl);
-        this.refreshFromData();
     }
 };
