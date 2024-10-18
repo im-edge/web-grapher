@@ -127,14 +127,8 @@ ImedgeGraphHandler.prototype = {
                 adjust[param.key] = param.value
             }
         });
-        adjust = graph.getAvailableDimensions(adjust);
 
-        if ($.isEmptyObject(adjust)) {
-            console.log('no adjustment')
-            console.log(url);
-        } else {
-            console.log('adjustment')
-            console.log(adjust);
+        if (!$.isEmptyObject(adjust)) {
             const $set = $graph.closest('.imedge-graph-set');
             if ($set.length === 0) {
                 this.loader.loadGraph(graph, adjust);
@@ -146,6 +140,7 @@ ImedgeGraphHandler.prototype = {
                 });
             }
         }
+
         return false;
     },
 
