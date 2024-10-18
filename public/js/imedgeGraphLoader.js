@@ -54,7 +54,7 @@ ImedgeGraphLoader.prototype = {
         request.success(this.loadingSucceeded.bind(this));
         request.error(this.loadingFailed.bind(this))
         request.complete(this.loadingCompleted.bind(this));
-        request.rrdGraph = graph;
+        request.graph = graph;
         request.requestedUrl = url;
         this.loadingGraphs[graph.getId()] = request;
         // Doesn't work, SNMP is on another node UUID (not Metric)
@@ -111,7 +111,7 @@ ImedgeGraphLoader.prototype = {
                 continue;
             }
             delete(this.dirtyGraphs[id]);
-            graph = _this.graphs[id];
+            graph = _this.graphHandler.graphs[id];
             if (typeof graph === 'undefined') {
                 // graph has been destroyed in the meantime
                 continue;
