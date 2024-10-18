@@ -42,21 +42,20 @@ ImedgeGraphHandler.prototype = {
         $(document).on('mouseup', this.mouseUp.bind(this));
         $(document).on('click', '.imedge-graph-canvas', this.mouseClick.bind(this));
         $(document).on('click', '.rrd-toggle-ds', this.toggleDs.bind(this));
-        this.layout.onChangedWidth(this.adjustWidthForAllImages.bind(this));
+        this.layout.onChangedWidth(this.refreshAllContainerImages.bind(this));
+        $('#layout').on('layout-change', this.refreshAllImages.bind(this));
         $(document).on('rendered', '.container', this.containerRendered.bind(this));
         $(document).on('close-column', '.container', this.containerRendered.bind(this));
         $(document).on('click', '.imedge-graph a', this.linkClicked.bind(this));
         $(document).on('imedge-color-scheme-change', '#layout', this.colorSchemeChanged.bind(this));
 
         setTimeout(this.registerNewGraphs.bind(this), 0);
-        // this.loadAllGraphs();
         setInterval(this.registerNewGraphs.bind(this), 1000);
     },
 
     containerRendered: function (event) {
         this.registerNewGraphs();
         this.forgetObsoleteGraphs();
-        // this.loadAllGraphs();
     },
 
     colorSchemeChanged: function () {
@@ -545,14 +544,19 @@ ImedgeGraphHandler.prototype = {
         });
     },
 
-    loadAllGraphs: function () {
-        const loader = this.loader;
-        $.each(this.graphs, function (idx, graph) {
-            loader.loadGraph(graph, {});
-        });
+    refreshAllImages: function () {
+        const _this = this;
+        setTimeout(function () {
+            $('.imedge-graph').each(function (idx, element) {
+                let graph = _this.getGraphForElement(element);
+                if (graph) {
+                    _this.loader.loadGraph(graph);
+                }
+            });
+        }, 300);
     },
 
-    adjustWidthForAllImages: function ($container, width) {
+    refreshAllContainerImages: function ($container, width) {
         const _this = this;
         $container.find('.imedge-graph').each(function (idx, element) {
             let graph = _this.getGraphForElement(element);
