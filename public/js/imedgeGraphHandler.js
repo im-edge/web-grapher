@@ -522,7 +522,7 @@ ImedgeGraphHandler.prototype = {
             graph = this.getGraphForElement($(event.currentTarget).closest('.imedge-graph'));
         }
         if (! graph) {
-            icinga.logger.info('Moving, no graph');
+            // console.log('Moving, no graph');
             return;
         }
         if (graph.isSelecting()) {
