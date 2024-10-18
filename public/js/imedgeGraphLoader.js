@@ -111,7 +111,7 @@ ImedgeGraphLoader.prototype = {
                 continue;
             }
             delete(this.dirtyGraphs[id]);
-            graph = this.graphs[id];
+            graph = _this.graphs[id];
             if (typeof graph === 'undefined') {
                 // graph has been destroyed in the meantime
                 continue;
@@ -121,7 +121,7 @@ ImedgeGraphLoader.prototype = {
                 continue;
             }
             if (graph.getUrl() !== graph.getExpectedUrl()) {
-                this.reallyLoadGraph(graph, graph.getExpectedUrl())
+                _this.reallyLoadGraph(graph, graph.getExpectedUrl())
             }
         }
     },
