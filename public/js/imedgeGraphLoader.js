@@ -33,6 +33,9 @@ ImedgeGraphLoader.prototype = {
         tweakParams = rrdGraph.getAvailableDimensions(tweakParams);
         const requestedUrl = this.applyUrlParams(url, tweakParams);
         this.tellGraphAboutExpectedParams(rrdGraph, tweakParams);
+        if (requestedUrl === rrdGraph.getUrl()) {
+            return;
+        }
         /*
         // Doesn't work, SNMP is on another node UUID (not Metric)
         let sendUrl = requestedUrl;
