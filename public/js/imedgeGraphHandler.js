@@ -41,7 +41,7 @@ ImedgeGraphHandler.prototype = {
         $(document).on('wheel', '.imedge-graph-canvas', this.scroll.bind(this));
         $(document).on('mouseup', this.mouseUp.bind(this));
         $(document).on('click', '.imedge-graph-canvas', this.mouseClick.bind(this));
-        $(document).on('click', '.rrd-toggle-ds', this.toggleDs.bind(this));
+        $(document).on('click', '.imedge-graph-toggle-ds', this.toggleDs.bind(this));
         this.layout.onChangedWidth(this.refreshAllContainerImages.bind(this));
         $('#layout').on('layout-change', this.refreshAllImages.bind(this));
         $(document).on('rendered', '.container', this.containerRendered.bind(this));
@@ -54,6 +54,7 @@ ImedgeGraphHandler.prototype = {
     },
 
     containerRendered: function (event) {
+        // TODO: remember col1/col2, trigger refreshAll on other container if changed
         this.registerNewGraphs();
         this.forgetObsoleteGraphs();
     },
@@ -454,7 +455,7 @@ ImedgeGraphHandler.prototype = {
         // TODO: check for existing ID
         $graph.attr('id', id);
         $graph.addClass('imedge-graph-registered');
-        // const $debug = $('<div class="rrd-debug"></div>').hide();
+        // const $debug = $('<div class="imedge-graph-debug"></div>').hide();
         // $graph.append($debug);
         const graph = new ImedgeGraph($graph, this.window);
         this.graphs[id] = graph;

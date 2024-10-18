@@ -92,7 +92,7 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
     {
         $dimensions = $this->graph->getDimensions();
         if ($dimensions->getHeight() > 40) {
-            $this->add(Html::tag('div', ['class' => 'rrd-debug'], 'debug...'));
+            $this->add(Html::tag('div', ['class' => 'imedge-graph-debug'], 'debug...'));
         }
         $img = Html::tag('img', [
             'alt'   => '',
@@ -100,7 +100,7 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
             'style'  => 'width: 100%; max-height: 100%;',
             // 'width'  => $dimensions->getWidth(),
             // 'height' => $dimensions->getHeight(),
-            'data-rrd-url' => $this->getUrl(),
+            'data-imedge-graph-url' => $this->getUrl(),
         ]);
         if ($this->loadImmediately) {
             $graphInfo = $this->getGraphInfo();

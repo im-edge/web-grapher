@@ -69,7 +69,7 @@ ImedgeGraph.prototype = {
     },
 
     refreshFromImageData: function () {
-        const url = this.$imgElement.data('rrdUrl');
+        const url = this.$imgElement.data('imedgeGraphUrl');
         if (typeof url === 'undefined') {
             console.log('Got an image without URL');
             return;
@@ -103,7 +103,7 @@ ImedgeGraph.prototype = {
         } else {
             $graph.children('.imedge-graph-legend').html('');
         }
-        this.$canvas.find('.rrd-selection').remove();
+        this.$canvas.find('.imedge-graph-selection').remove();
         if (typeof graphDimensions === 'undefined') {
             console.error('Result has no graph data: ', requestedUrl);
             return;
@@ -208,7 +208,7 @@ ImedgeGraph.prototype = {
         const d = new Date(this.getCurrentTimestamp() * 1000);
         const l = new Date(this.getStart() * 1000);
         const r = new Date(this.getEnd() * 1000);
-        const $el = this.$element.children('.rrd-debug');
+        const $el = this.$element.children('.imedge-graph-debug');
         if (window.icinga.ui === null) {
             console.log('Have no Icinga, no debug');
             return;
@@ -274,7 +274,7 @@ ImedgeGraph.prototype = {
     showCursor: function (timestamp) {
         if (timestamp && this.showsTimestamp(timestamp)) {
             if (this.$cursor === null) {
-                this.$cursor = $('<div class="rrd-cursor"></div>');
+                this.$cursor = $('<div class="imedge-graph-cursor"></div>');
                 this.$canvas.append(this.$cursor);
             }
             const x = this.getTimeOffset(timestamp);
@@ -298,11 +298,11 @@ ImedgeGraph.prototype = {
     },
 
     showDebug: function () {
-        this.$element.children('.rrd-debug').show();
+        this.$element.children('.imedge-graph-debug').show();
     },
 
     hideDebug: function () {
-        this.$element.children('.rrd-debug').hide();
+        this.$element.children('.imedge-graph-debug').hide();
     },
 
     showsTimestamp: function (ts) {

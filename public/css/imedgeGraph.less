@@ -185,35 +185,12 @@ div.legend-color { // TODO: imedge prefix
     border: 1px solid @text-color;
 }
 
-
-
-div.XXimg-rows {
-    // border: 1px solid green;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-
-// Older, w/o flex:
-// width: 32em; display: inline-block; vertical-align: top; overflow: hidden; float: left; margin-right: 1em;
-// had another div as content: max-width: 72em; display: block; vertical-align: top; overflow: hidden; float: left;
-}
-
-div.XXimg-col {
-    // border: 1px solid red;
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-}
-
-
-div.rrd-control {
+div.imedge-graph-control { // unused
     display: inline-block;
     position: relative;
 }
 
-.rrd-toggle-ds.disabled {
+.imedge-graph-toggle-ds.disabled { // unused
     text-decoration: line-through;
 }
 
@@ -225,59 +202,13 @@ div.rrd-control {
     }
 }
 
-.rrd-graph {
-    position: relative;
-    // overflow: hidden; disabled bc of hover -> details
-    overscroll-behavior: contain;
-    // z-index: 2000;
-    line-height: 0.2em; // solves issues with spacing. Hint: affects potential future contained elements
-    line-height: normal;
-    &.selecting {
-        cursor: e-resize;
-    }
-    img {
-        min-width: 1px;
-    }
-    // Highlight graphs:
-    // background: fade(@gray-light, 10%);
-}
-
-.rrd-graph {
-    div.description .name-value-table {
-        display: inline-block;
-        width: 49%;
-        font-size: 0.85em;
-        vertical-align: top;
-        th {
-            min-width: 9em;
-            width: 40%;
-        }
-    }
-    div.description.hidden {
-        display: none;
-        background: @text-color-inverted;
-        color: @text-color;
-        position: absolute;
-        left: -50%;
-        padding: 0.5em 1em;
-        border-radius: 1em;
-        margin-top: 2em;
-        margin-left: -1.8em;
-        z-index: 20;
-        box-shadow: 0.3em 0.3em 0.5em @gray;
-        &.hovered {
-            display: block;
-        }
-    }
-}
-
-div.rrd-selection {
+div.imedge-graph-selection {
     position: absolute;
     height: 100%;
     width: 100%;
 }
 
-div.rrd-debug {
+div.imedge-graph-debug {
     position: absolute;
     display: none;
     color: @text-color;
@@ -292,7 +223,7 @@ div.rrd-debug {
     font-size: 1em;
 }
 
-div.rrd-mark {
+div.imedge-graph-mark { // unused
     position: absolute;
     z-index: 3;
     height: 100%;
@@ -313,7 +244,7 @@ div.rrd-mark {
     }
 }
 
-div.rrd-cursor {
+div.imedge-graph-cursor {
     position: absolute;
     z-index: 3;
     height: 100%;
@@ -349,7 +280,7 @@ div.rrd-cursor {
       margin-left: -4.5px;
     }*/
 }
-div.rrd-time-selection {
+div.imedge-graph-time-selection {
     border: 1px dashed @icinga-blue;
     position: absolute;
     z-index: 2;
@@ -359,7 +290,7 @@ div.rrd-time-selection {
         border-color: @color-critical;
     }
 }
-div.rrd-time-not-selection {
+div.imedge-graph-time-not-selection {
     position: absolute;
     z-index: 2;
     background: fade(@icinga-blue, 40%); // rgba(0, 149, 191, 0.25);

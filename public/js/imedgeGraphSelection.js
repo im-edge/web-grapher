@@ -1,9 +1,9 @@
 const ImedgeGraphSelection = function (graph) {
     this.graph = graph;
-    this.tplSelection = '<div class="rrd-selection"> </div>';
-    this.tplBefore = '<div class="rrd-time-not-selection selection-before" style="left: 0"> </div>';
-    this.tplMain   = '<div class="rrd-time-selection"> </div>';
-    this.tplAfter  = '<div class="rrd-time-not-selection selection-after" style="right: 0"> </div>';
+    this.tplSelection = '<div class="imedge-graph-selection"> </div>';
+    this.tplBefore = '<div class="imedge-graph-time-not-selection selection-before" style="left: 0"> </div>';
+    this.tplMain   = '<div class="imedge-graph-time-selection"> </div>';
+    this.tplAfter  = '<div class="imedge-graph-time-not-selection selection-after" style="right: 0"> </div>';
     this.rectBefore = null;
     this.rectMain = null;
     this.rectAfter = null;
@@ -21,7 +21,7 @@ ImedgeGraphSelection.prototype = {
     getSelection: function () {
         if (typeof(this.$selection) === 'undefined' || this.$selection === null) {
             const $canvas = this.graph.$canvas;
-            let $selection = $canvas.find('.rrd-selection');
+            let $selection = $canvas.find('.imedge-graph-selection');
             if ($selection.length === 0) {
                 $selection = $(this.tplSelection);
                 $canvas.prepend($selection);
