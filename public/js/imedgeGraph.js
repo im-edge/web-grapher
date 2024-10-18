@@ -305,7 +305,7 @@ ImedgeGraph.prototype = {
     },
 
     showsTimestamp: function (ts) {
-        return ts >= this.start && ts <= this.end;
+        return ts >= this.getStart() && ts <= this.getEnd();
     },
 
     getDuration: function () {
