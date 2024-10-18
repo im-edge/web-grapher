@@ -1,4 +1,3 @@
-
 /**
  * Takes care of loading images
  *
@@ -10,6 +9,7 @@
  */
 const ImedgeGraphLoader = function (imedgeGraphHandler) {
     this.graphHandler = imedgeGraphHandler;
+    this.loadingScheduled = false;
     this.deferredRequests = {};
     this.deferredTimers = {};
     this.dirtyGraphs = {};
@@ -22,40 +22,40 @@ ImedgeGraphLoader.prototype = {
     initialize: function () {
         // TODO: module.icinga.utils
         this.utils = window.icinga.utils;
-        setInterval(this.triggerLoading.bind(this), 500);
-        this.triggerLoading();
+        setInterval(this.scheduleLoading.bind(this), 500);
     },
 
     loadGraph: function (graph, tweakParams) {
-        let url = graph.getUrl();
+        let url = graph.getExpectedUrl();
         if (typeof url === 'undefined') {
             // Cannot load a graph with no Url
             return;
         }
         tweakParams = graph.getAvailableDimensions(tweakParams);
-        const requestedUrl = this.applyUrlParams(url, tweakParams);
-        this.tellGraphAboutExpectedParams(graph, tweakParams);
-        if (requestedUrl === graph.getUrl()) {
+        url = this.applyUrlParams(url, tweakParams);
+        if (url === graph.getActiveUrl()) {
+            console.log('expected is active');
             return; // TODO: force if scheme changed?
         }
-
+        graph.setExpectedUrl(url); // Remains the same, if tweak is empty
+        this.tellGraphAboutExpectedParams(graph, tweakParams); // end, start
         this.markDirty(graph);
     },
 
     reallyLoadGraph: function (graph, url) {
-        this.tellGraphAboutExpectedParams(graph, tweakParams);
         let request = $.ajax({
             url: url,
             cache: true,
             headers: {
                 'X-IMEdge-ColorScheme':  (this.graphHandler.window.colorScheme)
-            }
+            },
+            success: this.loadingSucceeded.bind(this),
+            error: this.loadingFailed.bind(this),
+            complete: this.loadingCompleted.bind(this)
         });
-        request.success(this.loadingSucceeded.bind(this));
-        request.error(this.loadingFailed.bind(this))
-        request.complete(this.loadingCompleted.bind(this));
         request.graph = graph;
         request.requestedUrl = url;
+        graph.requestedUrl = url;
         this.loadingGraphs[graph.getId()] = request;
         // Doesn't work, SNMP is on another node UUID (not Metric)
         // if (graph.getDuration() === 0 && graph.endsNow()) {
@@ -79,6 +79,7 @@ ImedgeGraphLoader.prototype = {
         const graph = request.graph;
         const idx = graph.getId();
         delete(this.loadingGraphs[idx]);
+        this.scheduleLoading();
     },
 
     tellGraphAboutExpectedParams: function (graph, expectedParams) {
@@ -97,12 +98,22 @@ ImedgeGraphLoader.prototype = {
         }
         this.dirtyGraphs[id] = graph;
         this.dirtyQueue.push(id)
-        this.triggerLoading();
+        this.scheduleLoading();
+    },
+
+    scheduleLoading: function () {
+        if (this.loadingScheduled) {
+            return;
+        }
+        this.loadingScheduled = true;
+        setTimeout(this.triggerLoading.bind(this), 5);
     },
 
     triggerLoading: function () {
+        this.loadingScheduled = false;
         const _this = this;
         let id, graph;
+        let deferred = [];
         while (this.dirtyQueue.length) {
             id = this.dirtyQueue.shift();
             graph = this.dirtyGraphs[id];
@@ -120,10 +131,14 @@ ImedgeGraphLoader.prototype = {
                 // graph vanished from DOM, not (yet) destroyed
                 continue;
             }
-            if (graph.getUrl() !== graph.getExpectedUrl()) {
+
+            if (id in _this.loadingGraphs) {
+                deferred.push(id);
+            } else if (graph.getRequestedUrl() !== graph.getExpectedUrl()) {
                 _this.reallyLoadGraph(graph, graph.getExpectedUrl())
             }
         }
+        this.dirtyQueue = deferred;
     },
 
     addGraphSettingsToContainerUrl: function (graph) {

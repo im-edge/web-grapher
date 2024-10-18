@@ -1,4 +1,3 @@
-
 const ImedgeGraph = function ($element) {
     this.graphDimensions = {
         top: null,
@@ -22,8 +21,9 @@ const ImedgeGraph = function ($element) {
     this.$cursor = null;
     this.id = $element.attr('id');
 
-    this.url = null;
+    this.activeUrl = null;
     this.expectedUrl = null;
+    this.requestedUrl = null;
     this.expectedStart = null;
     this.expectedEnd = null;
     this.imageRatio = 1;
@@ -68,10 +68,15 @@ ImedgeGraph.prototype = {
     },
 
     refreshFromImageData: function () {
+        const url = this.$imgElement.data('rrdUrl');
+        if (typeof url === 'undefined') {
+            console.log('Got an image without URL');
+            return;
+        }
+        this.expectedUrl = url;
+        this.requestedUrl = url;
         const graphDimensions = this.$imgElement.data('graph');
         if (typeof graphDimensions === 'undefined') {
-            this.requestedUrl = this.$imgElement.data('rrdUrl');
-            // Image has not been preloaded
             return;
         }
         const imageDimensions = this.$imgElement.data('image');
@@ -79,11 +84,11 @@ ImedgeGraph.prototype = {
             console.log('Got graphData, but no imageData')
             return;
         }
+        this.activeUrl = url;
         this.graphDimensions = graphDimensions;
         this.imageDimensions = imageDimensions;
         this.clearSelection();
         this.checkForChangedWidth(false);
-        this.debug('From fresh data');
     },
 
     setDataFromResult: function (requestedUrl, result) {
@@ -115,7 +120,9 @@ ImedgeGraph.prototype = {
         img.decode().then(() => { // wait until temporary image is decoded
             $img.attr('src', img.src); // replace your actual element now
         });
-        this.url = requestedUrl;
+        this.activeUrl = requestedUrl;
+        this.clearSelection();
+        this.checkForChangedWidth();
     },
 
     getAvailableDimensions: function (result = {}) {
@@ -155,8 +162,8 @@ ImedgeGraph.prototype = {
         return this.id;
     },
 
-    getUrl: function () {
-        return this.url;
+    getActiveUrl: function () {
+        return this.activeUrl;
     },
 
     setExpectedUrl: function (url) {
@@ -164,7 +171,14 @@ ImedgeGraph.prototype = {
     },
 
     getExpectedUrl: function () {
+        if (this.expectedUrl === null) {
+            return null;
+        }
         return window.imedge.loader.applyUrlParams(this.expectedUrl, this.getAvailableDimensions());
+    },
+
+    getRequestedUrl: function () {
+        return this.requestedUrl;
     },
 
     getElement: function () {
@@ -315,7 +329,7 @@ ImedgeGraph.prototype = {
     },
 
     endsNow: function () {
-        const url = this.getUrl();
+        const url = this.getActiveUrl();
         const params = window.icinga.utils.parseUrl(url).params;
         let end = null;
         $.each(params, function (_, param) {

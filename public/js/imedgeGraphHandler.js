@@ -1,4 +1,3 @@
-
 const ImedgeGraphHandler = function (layout, icinga) {
     this.layout = layout;
     this.icinga = icinga;
@@ -407,7 +406,7 @@ ImedgeGraphHandler.prototype = {
         $a.toggleClass('disabled');
         const _this = this;
         $.each(this.getGraphsRelatedToLegendLink($a), function (idx, graph) {
-            const url = graph.getUrl();
+            const url = graph.getActiveUrl();
             _this.loader.loadGraph(graph, {disableDatasources: _this.toggleDsParam(url, ds)});
         });
     },
@@ -465,8 +464,8 @@ ImedgeGraphHandler.prototype = {
         // $graph.append($debug);
         const graph = new ImedgeGraph($graph);
         this.graphs[id] = graph;
-        if (!$graph.find('img').data('preLoaded')) {
-            this.loader.loadGraph(graph, graph.getAvailableDimensions());
+        if (graph.$imgElement.data('preLoaded')) {
+            this.loader.loadGraph(graph);
         }
 
         return this.graphs[id];
@@ -555,19 +554,10 @@ ImedgeGraphHandler.prototype = {
 
     adjustWidthForAllImages: function ($container, width) {
         const _this = this;
-        width = Math.floor(width);
-        width -= 24; // padding, margin
         $container.find('.imedge-graph').each(function (idx, element) {
             let graph = _this.getGraphForElement(element);
-            if (! graph) {
-                return;
-            }
-            let $img = graph.$imgElement;
-            if ($img.width() !== width) {
-                console.log($img.width(), 'is not', width, ' - reloading');
-                // this is for responsiveness:
-                // _this.loader.loadGraph(graph, {width: width});
-                _this.loader.loadGraph(graph, {});// , {width: width});
+            if (graph) {
+                _this.loader.loadGraph(graph);
             }
         });
     }
