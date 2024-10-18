@@ -20,11 +20,11 @@ ImedgeGraphSelection.prototype = {
 
     getSelection: function () {
         if (typeof(this.$selection) === 'undefined' || this.$selection === null) {
-            const $graph = this.graph.$canvas;
-            let $selection = $graph.find('.rrd-selection');
+            const $canvas = this.graph.$canvas;
+            let $selection = $canvas.find('.rrd-selection');
             if ($selection.length === 0) {
                 $selection = $(this.tplSelection);
-                $graph.prepend($selection);
+                $canvas.prepend($selection);
                 $selection.css({
                     top: this.pixel(this.graph.translatePosition(this.graph.getTop())),
                     left: this.pixel(this.graph.translatePosition(this.graph.getLeft())),
