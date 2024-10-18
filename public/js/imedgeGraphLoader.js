@@ -43,7 +43,7 @@ ImedgeGraphLoader.prototype = {
     },
 
     reallyLoadGraph: function (graph, url) {
-        this.tellGraphAboutExpectedParams(rrdGraph, tweakParams);
+        this.tellGraphAboutExpectedParams(graph, tweakParams);
         let request = $.ajax({
             url: url,
             cache: true,
@@ -81,12 +81,12 @@ ImedgeGraphLoader.prototype = {
         delete(this.loadingGraphs[idx]);
     },
 
-    tellGraphAboutExpectedParams: function (rrdGraph, expectedParams) {
+    tellGraphAboutExpectedParams: function (graph, expectedParams) {
         if (expectedParams.start) {
-            rrdGraph.setExpectedStart(expectedParams.start)
+            graph.setExpectedStart(expectedParams.start)
         }
         if (expectedParams.end) {
-            rrdGraph.setExpectedEnd(expectedParams.end)
+            graph.setExpectedEnd(expectedParams.end)
         }
     },
 
@@ -126,14 +126,14 @@ ImedgeGraphLoader.prototype = {
         }
     },
 
-    addGraphSettingsToContainerUrl: function (rrdGraph) {
-        const $container = rrdGraph.$element.closest('.container');
+    addGraphSettingsToContainerUrl: function (graph) {
+        const $container = graph.$element.closest('.container');
         const newUrl = this.utils.addUrlParams(this.utils.removeUrlParams($container.data('icingaUrl'), [
             'metricStart',
             'metricEnd'
         ]), {
-            metricStart: rrdGraph.getStart(),
-            metricEnd: rrdGraph.getEnd(),
+            metricStart: graph.getStart(),
+            metricEnd: graph.getEnd(),
         });
         $container.find('>.controls a.refresh-container-control').attr('href', newUrl);
         $container.data({icingaUrl: newUrl});
