@@ -164,7 +164,7 @@ ImedgeGraph.prototype = {
     },
 
     getExpectedUrl: function () {
-        return this.applyUrlParams(this.expectedUrl, this.getAvailableDimensions());
+        return window.imedge.loader.applyUrlParams(this.expectedUrl, this.getAvailableDimensions());
     },
 
     getElement: function () {
