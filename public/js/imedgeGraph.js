@@ -238,7 +238,9 @@ ImedgeGraph.prototype = {
     },
 
     calculateTimeFromOffset: function (offset) {
-        return this.getStart() + ((offset / this.imageRatio - this.getLeft()) / this.getWidth() * this.getDuration());
+        return Math.floor(
+            this.getStart() + ((offset / this.imageRatio - this.getLeft()) / this.getWidth() * this.getDuration())
+        );
     },
 
     getHorizontalOffsetForMouseEvent: function (event) {
