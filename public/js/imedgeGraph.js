@@ -144,7 +144,8 @@ ImedgeGraph.prototype = {
     },
 
     applyColorScheme: function (result = {}) {
-        return result.colorScheme = this.window.colorScheme;
+        result.colorScheme = this.window.colorScheme;
+        return result;
     },
 
     layoutChanged: function () {
