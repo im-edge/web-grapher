@@ -33,6 +33,7 @@
         "imedge/web-url-signing": "@dev"
     },
     "require-dev": {
+        "clue/block-react": ">=1.5",
         "gipfl/icingaweb2": ">=0.10",
         "gipfl/translation": ">=0.1",
         "gipfl/zfdb": "^0.4.0",

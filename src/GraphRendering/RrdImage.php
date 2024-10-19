@@ -7,10 +7,13 @@ use Icinga\Web\UrlParams;
 use IMEdge\Json\JsonString;
 use IMEdge\RrdGraphInfo\GraphInfo;
 use IMEdge\Web\Grapher\Graph\ImedgeRrdGraph;
+use IMEdge\Web\Grapher\GraphModifier\PrintLabelFixer;
 use IMEdge\Web\Grapher\Structure\ExtendedRrdInfo;
 use IMEdge\Web\Rpc\IMEdgeClient;
 use ipl\Html\Html;
 use ipl\Html\HtmlDocument;
+
+use function Clue\React\Block\await;
 
 class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canvas?
 {
@@ -134,5 +137,17 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
     public function getGraphInfo(): GraphInfo
     {
         return $this->graphInfo ??= $this->client->graph($this->graph);
+    }
+
+    public function graph(ImedgeRrdGraph $graph): GraphInfo
+    {
+        $props = await($this->client->request('rrd.graph', [
+            'command' => (string) $graph,
+            'format'  => strtoupper($graph->getFormat()->getFormat()),
+        ]));
+        $info = GraphInfo::fromSerialization($props);
+        PrintLabelFixer::replacePrintLabels($graph, $info);
+
+        return $info;
     }
 }
