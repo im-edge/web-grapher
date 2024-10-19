@@ -27,10 +27,10 @@
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-zlib": "*",
-        "imedge/json": "^0.1.0",
+        "imedge/json": "^0.1",
         "imedge/rrd-graph-info": "^0.3",
         "imedge/rrdgraph": "^0.4",
-        "imedge/web-url-signing": "@dev"
+        "imedge/web-url-signing": "^0.1"
     },
     "require-dev": {
         "clue/block-react": ">=1.5",
