@@ -136,7 +136,7 @@ class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canv
 
     public function getGraphInfo(): GraphInfo
     {
-        return $this->graphInfo ??= $this->client->graph($this->graph);
+        return $this->graphInfo ??= $this->graph($this->graph);
     }
 
     public function graph(ImedgeRrdGraph $graph): GraphInfo
