@@ -10,7 +10,10 @@ class ImageLayout
     use TranslationHelper;
 
     protected bool $onlyGraph = false;
-    protected array $defaultParams = [
+    /**
+     * @array<string, int|string|bool>
+     */
+    protected array $defaultParams = [-
         'base' => 1000, // 1024 for memory. Traffic -> 1000
         // SI-prefix: 1000, Festplatten, Netzwerktraffic (bit/s) etc
         // IEC-prefix: 1024, RAM, Grafikspeicher, Prozessor-Cache
