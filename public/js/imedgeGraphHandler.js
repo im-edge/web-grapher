@@ -29,16 +29,19 @@ ImedgeGraphHandler.prototype = {
             this.loadUrlBeforeIMEdge(url, $target, data, method, action, autorefresh, progressTimer, extraHeaders);
         }.bind(this.icinga.loader);
          */
+        /*
+        // Disabled scroll handling for now, it can be annoying
         document.addEventListener('wheel', function (event) {
             if ($(event.target).closest('.imedge-graph-canvas').length > 0) {
                 event.preventDefault();
             }
         }, {passive: false});
+         */
         $(document).on('mousemove', '.imedge-graph-canvas', this.mouseMove.bind(this));
         $(document).on('mouseenter', '.imedge-graph-canvas', this.mouseEnter.bind(this));
         $(document).on('mouseleave', '.imedge-graph-canvas', this.mouseLeave.bind(this));
         $(document).on('mousedown', '.imedge-graph-canvas', this.mouseDown.bind(this));
-        $(document).on('wheel', '.imedge-graph-canvas', this.scroll.bind(this));
+        // $(document).on('wheel', '.imedge-graph-canvas', this.scroll.bind(this));
         $(document).on('mouseup', this.mouseUp.bind(this));
         $(document).on('click', '.imedge-graph-canvas', this.mouseClick.bind(this));
         $(document).on('click', '.imedge-graph-toggle-ds', this.toggleDs.bind(this));
