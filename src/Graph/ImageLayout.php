@@ -13,7 +13,7 @@ class ImageLayout
     /**
      * @array<string, int|string|bool>
      */
-    protected array $defaultParams = [-
+    protected array $defaultParams = [
         'base' => 1000, // 1024 for memory. Traffic -> 1000
         // SI-prefix: 1000, Festplatten, Netzwerktraffic (bit/s) etc
         // IEC-prefix: 1024, RAM, Grafikspeicher, Prozessor-Cache
