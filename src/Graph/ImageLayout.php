@@ -37,6 +37,7 @@ class ImageLayout
         'slope-mode' => false,
         // 'Z' => true,
         // 'watermark' => 'Graph rendered with IMEdge Metrics, powered by rrdtool',
+        'use-nan-for-all-missing-data' => true,
         'units-length' => 6,
         'left-axis-formatter' => 'numeric',
         'week-fmt' => 'CW %W', // TODO: Translate! (KW, ..)
