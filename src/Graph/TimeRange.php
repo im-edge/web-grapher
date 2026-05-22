@@ -123,7 +123,7 @@ class TimeRange
 
     public function getEpochStart(): int
     {
-        return $this->epochStart ?? self::wantEpoch($this->calculateStartEpoch(self::DEFAULT_END));
+        return $this->epochStart ?? self::wantEpoch($this->calculateStartEpoch(self::DEFAULT_START));
     }
 
     public function getEpochEnd(): int
