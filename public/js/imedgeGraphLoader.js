@@ -87,6 +87,14 @@ ImedgeGraphLoader.prototype = {
         graph.setDataFromResult(request.requestedUrl, result);
         this.addGraphSettingsToContainerUrl(graph);
         this.loadData(graph);
+        if (result.refresh) {
+            setTimeout(function() {
+                graph.setExpectedUrl(this.applyUrlParams(graph.getActiveUrl(), {
+                    live: Math.floor(Date.now() / 1000)
+                }));
+                this.markDirty(graph);
+            }.bind(this), 1200);
+        }
     },
 
     loadingFailed: function (request, status, error) {
