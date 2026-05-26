@@ -279,12 +279,49 @@ ImedgeGraph.prototype = {
             this.hideCursor();
             return;
         }
+        let start = this.graphDimensions.start;
+        let timePercent = (timestamp - start) / (this.graphDimensions.end - start);
         if (timestamp && this.showsTimestamp(timestamp)) {
             if (this.$cursor === null) {
                 this.$cursor = $('<div class="imedge-graph-cursor"></div>');
                 this.$canvas.append(this.$cursor);
             }
             const x = this.getTimeOffset(timestamp);
+            if (this.rawData && typeof this.rawData.meta !== 'undefined') {
+                let adjustedStart = Math.floor(start / this.rawData.meta.step) * this.rawData.meta.step;
+                let adjustedTimestamp = Math.floor(timestamp / this.rawData.meta.step) * this.rawData.meta.step;
+                let pos = Math.floor((timestamp - adjustedStart) / this.rawData.meta.step);
+                let cursorData = this.rawData.data[pos];
+                let legends = this.rawData.meta.legend;
+                if (typeof cursorData !== 'undefined') {
+                    const self = this;
+                    let text = $('<ul></ul>');
+                    let d = new Date(adjustedTimestamp * 1000);
+                    let $li = $('<li></li>').text(' (' + d.toLocaleDateString(undefined, {
+                        weekday: 'long',
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    }) + ')');
+                    $li.prepend($('<strong></strong> ').text(d.toLocaleTimeString()));
+                    text.append($li);
+                    let lastLabel = '';
+                    let lastSuffix = '';
+                    const output = this.formatValues(legends, cursorData);
+                    if (output.length === 0) {
+                        this.getCursorDetails(timePercent).html('').hide();
+                    } else {
+                        $.each(output, function (_, label) {
+                            let li = $('<li></li>');
+                            li.text(label);
+                            text.append(li);
+                        });
+                        this.getCursorDetails(timePercent).html(text).show();
+                    }
+                }
+            } else {
+                this.getCursorDetails(timePercent).html('').hide();
+            }
             this.$cursor.css({
                 left: this.pixel(this.translatePosition(x)),
                 top: this.pixel(this.translatePosition(this.getTop())),
@@ -298,12 +335,135 @@ ImedgeGraph.prototype = {
         }
     },
 
+    getCursorDetails: function (timePercent) {
+        if (this.$canvas.hasClass('hint-left')) {
+            if (timePercent < 0.25) {
+                this.$canvas.removeClass('hint-left')
+            }
+        } else {
+            if (timePercent > 0.75) {
+                this.$canvas.addClass('hint-left')
+            }
+        }
+
+        let $container = this.$canvas.find('.imedge-graph-cursor-details');
+        if ($container.length === 0) {
+            $container = $('<div class="imedge-graph-cursor-details"></div>');
+            this.$canvas.prepend($container);
+        }
+
+        return $container;
+    },
+
     hideCursor: function () {
         if (this.$cursor !== null) {
             this.$cursor.hide();
+            this.$canvas.find('.imedge-graph-cursor-details').hide();
         }
     },
 
+    formatPrefix: function (value, base = 1000, decimals = 2) {
+        if (value === 0) {
+            return '0';
+        }
+
+        const sign = value < 0 ? '-' : '';
+        let abs = Math.abs(value);
+
+        const prefixes = base === 1024
+            ? ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi']
+            : ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+
+        let index = 0;
+        while (abs >= base && index < prefixes.length - 1) {
+            abs /= base;
+            index++;
+        }
+
+        let formatted = abs.toFixed(decimals);
+        if (formatted.includes('.')) {
+            formatted = formatted.replace(/\.?0+$/, '');
+        }
+
+        if (prefixes[index] === '') {
+            return sign + formatted;
+        }
+
+        return sign + formatted + ' ' + prefixes[index];
+    },
+
+    formatValues: function (legends, values) {
+        const result = new Array(legends.length).fill(undefined);
+        const groups = {};
+
+        legends.forEach((legend, i) => {
+            const match = legend.match(/^(.*)\s+\((min|avg|max)\)$/);
+            if (match) {
+                const base = match[1];       // e.g. 'bit/s inbound'
+                const type = match[2];       // min, avg, max
+
+                if (!groups[base]) {
+                    groups[base] = {
+                        indices: {},
+                        unit: '',
+                        label: ''
+                    };
+                    // unit space label
+                    const spaceIdx = base.indexOf(' ');
+                    if (spaceIdx === -1) {
+                        groups[base].unit = base;
+                        groups[base].label = '';
+                    } else {
+                        groups[base].unit = base.substring(0, spaceIdx);
+                        groups[base].label = base.substring(spaceIdx + 1);
+                    }
+                }
+
+                groups[base].indices[type] = i;
+                groups[base][type + 'Val'] = this.formatPrefix(values[i], 1000, 2);
+            } else {
+                // no min/avg/max-suffix: keep
+                if (values[i] !== 0) {
+                    result[i] = this.formatPrefix(values[i], 1000, 2) + legend;
+                }
+            }
+        });
+
+        for (const [base, group] of Object.entries(groups)) {
+            const { minVal, avgVal, maxVal, unit, label, indices } = group;
+
+            if (indices.min !== undefined && indices.avg !== undefined && indices.max !== undefined) {
+                const avgIdx = indices.avg;
+                const minIdx = indices.min;
+                const maxIdx = indices.max;
+
+                if (minVal === avgVal && avgVal === maxVal) {
+                    if (avgVal.match('/^0 /') || avgVal === '0') { // ??
+                        continue;
+                    }
+                    result[avgIdx] = `${avgVal}${unit} ${label}`.trim();
+                } else {
+                    result[avgIdx] = `${avgVal}${unit} ${label} (min ${minVal}${unit}, max ${maxVal}${unit})`;
+                }
+
+                result[minIdx] = null;
+                result[maxIdx] = null;
+            } else {
+                for (const type of ['min', 'avg', 'max']) {
+                    const idx = indices[type];
+                    const val = group[type + 'Val'];
+                    if (idx !== undefined) {
+                        if (val === '0') { // ??
+                            continue;
+                        }
+                        result[idx] = `${val}${unit} ${label} (${type})`.trim();
+                    }
+                }
+            }
+        }
+
+        return result.filter(entry => entry !== null).filter(entry => typeof entry !== 'undefined');
+    },
     showDebug: function () {
         this.$element.children('.imedge-graph-debug').show();
     },
