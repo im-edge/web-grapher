@@ -345,8 +345,9 @@ ImedgeGraphHandler.prototype = {
 
     endSelecting: function (event) {
         this.cursor.show();
-        this.refreshCursors();
         const graph = this.selectingGraph;
+        // this.refreshCursors(); // No longe showing synced cursors for now
+        graph.showCursor(this.cursor);
         const maxEnd = Math.floor(Date.now() / 1000);
         event.stopPropagation();
         event.preventDefault();
@@ -532,7 +533,8 @@ ImedgeGraphHandler.prototype = {
             return;
         }
         this.cursor.show(ts);
-        this.refreshCursors();
+        graph.refreshCursor(this.cursor);
+        // this.refreshCursors();
     },
 
     refreshCursors: function () {
