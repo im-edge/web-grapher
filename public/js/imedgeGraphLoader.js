@@ -161,7 +161,11 @@ ImedgeGraphLoader.prototype = {
             }
 
             if (id in _this.loadingGraphs) {
+                // Disabling this...
+                // _this.loadingGraphs[id].abort();
                 deferred.push(id);
+                // ...and this for now:
+                // _this.reallyLoadGraph(graph, graph.getExpectedUrl())
             } else if (graph.getRequestedUrl() !== graph.getExpectedUrl()) {
                 _this.reallyLoadGraph(graph, graph.getExpectedUrl())
             }
