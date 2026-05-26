@@ -275,6 +275,10 @@ ImedgeGraph.prototype = {
     },
 
     showCursor: function (timestamp) {
+        if (typeof this.graphDimensions === 'undefined') {
+            this.hideCursor();
+            return;
+        }
         if (timestamp && this.showsTimestamp(timestamp)) {
             if (this.$cursor === null) {
                 this.$cursor = $('<div class="imedge-graph-cursor"></div>');
