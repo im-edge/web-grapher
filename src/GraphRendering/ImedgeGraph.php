@@ -21,7 +21,7 @@ class ImedgeGraph extends BaseHtmlElement
     public HtmlElement $header;
     public HtmlElement $canvas;
     public HtmlElement $legend;
-    protected RrdImage $image;
+    public RrdImage $image;
     protected Url $url;
 
     public function __construct(RrdImage $image, Url $url, string $title)
