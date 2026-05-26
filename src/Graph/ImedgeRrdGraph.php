@@ -27,7 +27,7 @@ class ImedgeRrdGraph
         $this->definition = $definition;
     }
 
-    public function setDefinition(GraphDefinition $definition)
+    public function setDefinition(GraphDefinition $definition): void
     {
         $this->definition = $definition;
     }
