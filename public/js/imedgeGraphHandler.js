@@ -37,13 +37,13 @@ ImedgeGraphHandler.prototype = {
             }
         }, {passive: false});
          */
-        $(document).on('mousemove', '.imedge-graph-canvas', this.mouseMove.bind(this));
-        $(document).on('mouseenter', '.imedge-graph-canvas', this.mouseEnter.bind(this));
-        $(document).on('mouseleave', '.imedge-graph-canvas', this.mouseLeave.bind(this));
-        $(document).on('mousedown', '.imedge-graph-canvas', this.mouseDown.bind(this));
+        $(document).on('mousemove', '.imedge-graph:not(.imedge-non-interactive) .imedge-graph-canvas', this.mouseMove.bind(this));
+        $(document).on('mouseenter', '.imedge-graph:not(.imedge-non-interactive) .imedge-graph-canvas', this.mouseEnter.bind(this));
+        $(document).on('mouseleave', '.imedge-graph:not(.imedge-non-interactive) .imedge-graph-canvas', this.mouseLeave.bind(this));
+        $(document).on('mousedown', '.imedge-graph:not(.imedge-non-interactive) .imedge-graph-canvas', this.mouseDown.bind(this));
         // $(document).on('wheel', '.imedge-graph-canvas', this.scroll.bind(this));
         $(document).on('mouseup', this.mouseUp.bind(this));
-        $(document).on('click', '.imedge-graph-canvas', this.mouseClick.bind(this));
+        $(document).on('click', '.imedge-graph:not(.imedge-non-interactive) .imedge-graph-canvas', this.mouseClick.bind(this));
         $(document).on('click', '.imedge-graph-toggle-ds', this.toggleDs.bind(this));
         this.layout.onChangedWidth(this.refreshAllContainerImages.bind(this));
         $('#layout').on('layout-change', this.refreshAllImages.bind(this));
