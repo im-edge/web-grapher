@@ -86,6 +86,7 @@ ImedgeGraphLoader.prototype = {
         const graph = request.graph;
         graph.setDataFromResult(request.requestedUrl, result);
         this.addGraphSettingsToContainerUrl(graph);
+        this.loadData(graph);
     },
 
     loadingFailed: function (request, status, error) {
