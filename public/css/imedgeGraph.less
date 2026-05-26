@@ -11,7 +11,22 @@
     grid-template-columns: minmax(0, 3fr) minmax(min-content, 1fr);
     grid-template-areas: "header header" "canvas legend";
     grid-template-rows: fit-content(0) auto;
+
+  &:not(.imedge-non-interactive) {
+    border: 1px solid @gray-light;
+    border-radius: 0.3em;
+    background-color: rgb(253, 253, 253);
+  }
 }
+
+#layout.imedge-dark {
+  .imedge-graph {
+    &:not(.imedge-non-interactive) {
+      background-color: rgb(24, 27, 31); // grafana
+    }
+  }
+}
+
 
 .imedge-graph-legend {
     grid-area: legend;
