@@ -214,14 +214,17 @@ ImedgeGraph.prototype = {
             return;
         }
         const fontSize = window.icinga.ui.getDefaultFontSize();
-        const lineHeight = fontSize * 1.2;
+        const lineHeight = fontSize * 1.25;
         const spaceOnSides = 0.75;
         const right = this.translatePosition(
             this.imageDimensions.width - this.getLeft() - this.getWidth()
         ) - spaceOnSides;
         $el.css({
-            top: this.pixel((this.translatePosition(this.getTop() + this.getHeight()) - lineHeight)),
-            left: this.pixel((this.translatePosition(this.getLeft()) + spaceOnSides)),
+            // oben:
+            top: this.pixel(this.translatePosition(this.getTop()) + lineHeight),
+            // unten:
+            // top: this.pixel(this.translatePosition(this.getTop() + this.getHeight()) - lineHeight),
+            left: this.pixel(this.translatePosition(this.getLeft()) + spaceOnSides),
             right: this.pixel(right),
             textAlign: 'right'
         });
