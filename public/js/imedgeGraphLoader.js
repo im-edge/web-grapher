@@ -42,6 +42,23 @@ ImedgeGraphLoader.prototype = {
         this.markDirty(graph);
     },
 
+    loadData: function (graph) {
+        let url = graph.getActiveUrl();
+        url = this.applyUrlParams(url, {
+            graphWidth: graph.graphDimensions.width,
+            start: graph.graphDimensions.start,
+            end: graph.graphDimensions.end,
+        });
+        url = url.replace('imedge/graph', 'imedge/graph/data');
+        let request = $.ajax({
+            url: url,
+            cache: true,
+            success: function (result) {
+                graph.rawData = result;
+            }
+        });
+    },
+
     reallyLoadGraph: function (graph, url) {
         let request = $.ajax({
             url: url,
