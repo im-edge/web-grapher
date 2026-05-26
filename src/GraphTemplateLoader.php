@@ -142,16 +142,16 @@ class GraphTemplateLoader
             . " LINE1:ifOutBitsMaxPerc95#00000000:skipscale" // set max (w/o skipscale)
             . " LINE1:ifOutBitsMaxPerc99#00000000:skipscale" // set max (w/o skipscale)
 
-            . " AREA:ifInBitsMin#56A64B22"
-            . " AREA:ifInStepAvg#56A64B66:STACK:skipscale"
-            . " AREA:ifInStepMax#56A64B66:STACK:skipscale"
+            . " AREA:ifInBitsMin#56A64B40"
+            . " AREA:ifInStepAvg#56A64B80:STACK:skipscale"
+            . " AREA:ifInStepMax#56A64B80:STACK:skipscale"
             // . " AREA:ifInBitsAvg#56A64B50"
             . " LINE1.2:ifInBitsAvg#56A64Bff"
             . " LINE1:ifOutBitsAvg#00000000" // force max mirrored
 
-            . " AREA:ifOutBitsMinMirrored#3274D922"
-            . " AREA:ifOutStepAvgMirrored#3274D966:STACK:skipscale"
-            . " AREA:ifOutStepMaxMirrored#3274D966:STACK:skipscale"
+            . " AREA:ifOutBitsMinMirrored#3274D940"
+            . " AREA:ifOutStepAvgMirrored#3274D980:STACK:skipscale"
+            . " AREA:ifOutStepMaxMirrored#3274D980:STACK:skipscale"
             // . " AREA:ifOutBitsAvgMirrored#3274D950"
             . " LINE1.2:ifOutBitsAvgMirrored#3274D9ff"
             . " LINE1:ifInBitsAvgMirrored#00000000" // force max mirrored
@@ -235,30 +235,30 @@ class GraphTemplateLoader
             . " VDEF:'txBitsAverage'=ifOutBitsAvg,AVERAGE"
 
             // Draw Percentiles
-            . " LINE1:ifInBitsMaxPerc95#57985B:'95 Percentile':dashes=3,5"
-            . " LINE1:ifInBitsMaxPerc99#57985B:dashes=3,2"
+            . " LINE1:ifInBitsMaxPerc95#56A64B:'95 Percentile':dashes=3,5"
+            . " LINE1:ifInBitsMaxPerc99#56A64B:dashes=3,2"
 
             . " LINE1:ifInBitsMaxPerc95#00000000" // set max (w/o skipscale)
             . " LINE1:ifInBitsMaxPerc99#00000000:'99 Percentile'" // set max (w/o skipscale)
 
-            . " LINE1:ifOutBitsMaxPerc95Mirrored#0095BF:dashes=3,5"
-            . " LINE1:ifOutBitsMaxPerc99Mirrored#0095BF:dashes=3,2"
+            . " LINE1:ifOutBitsMaxPerc95Mirrored#3274D9:dashes=3,5"
+            . " LINE1:ifOutBitsMaxPerc99Mirrored#3274D9:dashes=3,2"
 
             . " LINE1:ifOutBitsMaxPerc95#00000000" // set max (w/o skipscale)
             . " LINE1:ifOutBitsMaxPerc99#00000000" // set max (w/o skipscale)
 
-            . " AREA:ifInBitsMin#57985B22"
-            . " AREA:ifInStepAvg#57985B66:STACK"
-            . " AREA:ifInStepMax#57985B66:STACK"
-            // . " AREA:ifInBitsAvg#57985B50"
-            . " LINE1:ifInBitsAvg#57985Bff"
+            . " AREA:ifInBitsMin#56A64B40"
+            . " AREA:ifInStepAvg#56A64B80:STACK"
+            . " AREA:ifInStepMax#56A64B80:STACK"
+            // . " AREA:ifInBitsAvg#56A64B50"
+            . " LINE1:ifInBitsAvg#56A64Bff"
             . " LINE1:ifOutBitsAvg#00000000" // force max mirrored
 
-            . " AREA:ifOutBitsMinMirrored#0095BF22"
-            . " AREA:ifOutStepAvgMirrored#0095BF66:STACK"
-            . " AREA:ifOutStepMaxMirrored#0095BF66:STACK"
-            // . " AREA:ifOutBitsAvgMirrored#0095BF50"
-            . " LINE1:ifOutBitsAvgMirrored#0095BFff"
+            . " AREA:ifOutBitsMinMirrored#3274D940"
+            . " AREA:ifOutStepAvgMirrored#3274D980:STACK"
+            . " AREA:ifOutStepMaxMirrored#3274D980:STACK"
+            // . " AREA:ifOutBitsAvgMirrored#3274D950"
+            . " LINE1:ifOutBitsAvgMirrored#3274D9ff"
             . " LINE1:ifInBitsAvgMirrored#00000000" // force max mirrored
             . " LINE1:ifOutBitsMax#ff000000" // force max mirrored
             . " LINE1:ifInBitsMaxMirrored#ff000000" // force max mirrored
