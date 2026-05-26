@@ -11,7 +11,7 @@ class ImedgeGraphPreview extends BaseHtmlElement
     protected $tag = 'div';
 
     protected $defaultAttributes = [
-        'class' => ['imedge-graph', 'preview-graph'],
+        'class' => ['imedge-graph', 'preview-graph', 'imedge-non-interactive'],
     ];
     public HtmlElement $canvas;
     protected RrdImage $image;
