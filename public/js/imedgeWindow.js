@@ -3,6 +3,11 @@ const ImedgeWindow = function () {
     this.bgElement = $('#col1')[0];
     this.backgroundScheme = this.detectBackgroundScheme();
     this.colorScheme = this.detectColorScheme();
+    if (this.colorScheme === 'light') {
+        $('#layout').addClass('imedge-light');
+    } else {
+        $('#layout').addClass('imedge-dark');
+    }
     const _this = this;
     if (typeof window.matchMedia === 'function') {
         window
@@ -60,11 +65,15 @@ ImedgeWindow.prototype = {
     darkModeActivated: function () {
         this.backgroundScheme = this.detectBackgroundScheme();
         this.colorScheme = 'dark';
+        $('#layout').addClass('imedge-dark');
+        $('#layout').removeClass('imedge-light');
         $('#layout').trigger('imedge-color-scheme-change');
     },
     lightModeActivated: function () {
         this.backgroundScheme = this.detectBackgroundScheme();
         this.colorScheme = 'light';
+        $('#layout').addClass('imedge-light');
+        $('#layout').removeClass('imedge-dark');
         $('#layout').trigger('imedge-color-scheme-change');
     }
 };
