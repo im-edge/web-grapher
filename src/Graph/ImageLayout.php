@@ -119,7 +119,7 @@ class ImageLayout
     {
         return [
             'DEFAULT:0:LiberationSansMono',
-            sprintf('AXIS:%d:LiberationSansMono', $this->disableXAxis ? 7 : 8),
+            sprintf('AXIS:%d:LiberationSansMono', $this->disableXAxis ? 6 : 8),
         ];
     }
 
