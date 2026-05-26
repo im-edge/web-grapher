@@ -89,7 +89,9 @@ ImedgeGraphLoader.prototype = {
     },
 
     loadingFailed: function (request, status, error) {
-        console.log('Loading ' + request.requestedUrl + ' failed (' + status + '): ' + error);
+        if (error !== 'abort') {
+            console.log('Loading ' + request.requestedUrl + ' failed (' + status + '): ' + error);
+        }
     },
 
     loadingCompleted: function (request, status) {
