@@ -55,8 +55,11 @@ class ImedgeGraph extends BaseHtmlElement
         return Html::tag('ul', ['class' => 'nav'], Html::tag('li', [$mainLink, $sub]));
     }
 
-    protected function getMaxControl(): HtmlElement
+    protected function getMaxControl(): ?HtmlElement
     {
+        if (!in_array('ifInOctetsAvg', $this->image->graph->definition->listVariableNames())) {
+            return null;
+        }
         $templates = [
             'if_traffic'  => $this->translate('Show maximum Averages'),
             'if_traffic_max' => $this->translate('Show Peaks'),
