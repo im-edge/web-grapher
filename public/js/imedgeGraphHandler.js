@@ -125,10 +125,14 @@ ImedgeGraphHandler.prototype = {
             return false;
         }
         let adjust = {};
+        let hasTemplate = false;
         $.each(url.params, function (_, param) {
             // Hint: template is here for max only, must go
             if ($.inArray(param.key, ['start', 'end', 'template']) !== -1) {
                 adjust[param.key] = param.value
+            }
+            if (param.key === 'template' || hasTemplate) {
+                hasTemplate = true;
             }
         });
 
