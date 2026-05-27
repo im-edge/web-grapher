@@ -131,14 +131,14 @@ ImedgeGraphHandler.prototype = {
             if ($.inArray(param.key, ['start', 'end', 'template']) !== -1) {
                 adjust[param.key] = param.value
             }
-            if (param.key === 'template' || hasTemplate) {
+            if (param.key === 'template') {
                 hasTemplate = true;
             }
         });
 
         if (!$.isEmptyObject(adjust)) {
             const $set = $graph.closest('.imedge-graph-set');
-            if ($set.length === 0) {
+            if ($set.length === 0 || hasTemplate) {
                 this.loader.loadGraph(graph, adjust);
             } else {
                 const _this = this;
