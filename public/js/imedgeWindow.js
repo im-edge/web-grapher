@@ -3,7 +3,7 @@ const ImedgeWindow = function () {
     this.bgElement = $('#col1')[0];
     this.backgroundScheme = this.detectBackgroundScheme();
     this.colorScheme = this.detectColorScheme();
-    if (this.colorScheme === 'light') {
+    if (this.backgroundScheme === 'light') {
         $('#layout').addClass('imedge-light');
     } else {
         $('#layout').addClass('imedge-dark');

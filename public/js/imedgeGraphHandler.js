@@ -22,9 +22,9 @@ ImedgeGraphHandler.prototype = {
 
         this.icinga.loader.loadUrl = function (url, $target, data, method, action, autorefresh, progressTimer, extraHeaders) {
             if (typeof extraHeaders === 'undefined') {
-                extraHeaders = {'X-IMEdge-ColorScheme': _this.window.colorScheme};
+                extraHeaders = {'X-IMEdge-ColorScheme': _this.window.backgroundScheme};
             } else {
-                extraHeaders['X-IMEdge-ColorScheme'] = _this.window.colorScheme;
+                extraHeaders['X-IMEdge-ColorScheme'] = _this.window.backgroundScheme;
             }
             this.loadUrlBeforeIMEdge(url, $target, data, method, action, autorefresh, progressTimer, extraHeaders);
         }.bind(this.icinga.loader);
