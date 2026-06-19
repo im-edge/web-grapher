@@ -30,10 +30,10 @@
         "imedge/json": "^0.1",
         "imedge/rrd-graph-info": "^0.3",
         "imedge/rrdgraph": ">=0.5",
+        "imedge/web-compat": ">=0.1.",
         "imedge/web-url-signing": "^0.1"
     },
     "require-dev": {
-        "clue/block-react": "^1.5",
         "gipfl/icingaweb2": "^0.10",
         "gipfl/translation": "^0.1",
         "gipfl/zfdb": "^0.4",

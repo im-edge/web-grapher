@@ -13,7 +13,7 @@ use IMEdge\Web\Rpc\IMEdgeClient;
 use ipl\Html\Html;
 use ipl\Html\HtmlDocument;
 
-use function Clue\React\Block\await;
+use function IMEdge\WebCompat\await;
 
 class RrdImage extends HtmlDocument // TODO: become Element -> imedge-graph-canvas?
 {
