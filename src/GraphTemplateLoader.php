@@ -387,7 +387,7 @@ class GraphTemplateLoader
             . " AREA:ifOutErrorsMirrored#1008FF"
             . " AREA:ifOutDiscardsMirrored#0A0773::STACK",
         'entitySensor' => "DEF:'def_average_sensorValue'='file1.rrd':'sensorValue':AVERAGE"
-            . " CDEF:'nullValue'=def_average_sensorValue,0,* LINE1:nullValue#00000000:skipscale"
+            . " CDEF:'nullValue'=def_average_sensorValue,0,* LINE1:nullValue#00000000" // :skipscale
             . " LINE1.3:def_average_sensorValue#E6B40C AREA:def_average_sensorValue#E6B40C44",
         'value' => "DEF:'def_avg_value'='file1.rrd':'value':AVERAGE CDEF:'cdef_zero'=def_avg_value,0,*"
             . " LINE1:cdef_zero#00000000 AREA:def_avg_value#42420166 LINE1:def_avg_value#424201:'Title'",
